@@ -4,6 +4,8 @@ A personal developer blog about the real problems met while building with PHP, M
 
 Built with Laravel 12, Livewire 4 and Vite.
 
+> There is no admin yet: posts come from the database seeders. A Filament admin for writing posts is planned (see `docs/finish-project-plan.md`).
+
 ## Requirements
 
 - PHP 8.4, Composer

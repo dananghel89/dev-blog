@@ -36,34 +36,12 @@ class PostFactory extends Factory
             'slug' => Str::slug($title) . '-' . $uniqueNumber,
             'content' => $content,
             'excerpt' => $excerpt,
-            'featured_image' => $this->generatePlaceholdCoImage(),
+            // No external placeholder service: views fall back to the local SVGs (Post::imageUrl()).
+            'featured_image' => null,
             'category_id' => Category::factory(),
             'is_published' => fake()->boolean(80),
             'published_at' => fake()->dateTimeBetween('-6 months', 'now'),
         ];
-    }
-
-    private function generatePlaceholdCoImage(): string
-    {
-        $width = 1200;
-        $height = 630;
-        
-        // Random background color (hex without #)
-        $bgColor = str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-        
-        // Random text color (usually white or black)
-        $textColor = mt_rand(0, 1) ? 'ffffff' : '000000';
-        
-        // Random text
-        $texts = ['PHP', 'MySQL', 'Laravel', 'JavaScript', 'CSS', 'HTML', 'Coding', 'Debugging', 'DevOps', 'Server'];
-        $text = fake()->randomElement($texts);
-        
-        // 30% chance to return null (no image)
-        if (fake()->boolean(30)) {
-            return '';
-        }
-        
-        return "https://placehold.co/{$width}x{$height}/{$bgColor}/{$textColor}?text=" . urlencode($text);
     }
 
     private function generatePostContent(): string

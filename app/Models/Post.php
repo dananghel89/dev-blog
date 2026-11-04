@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -98,5 +99,27 @@ class Post extends Model
     {
         $wordCount = str_word_count(strip_tags($this->content));
         return max(1, ceil($wordCount / 200)) . ' min read';
+    }
+
+    /**
+     * The featured image URL, or a local placeholder in the requested ratio
+     * (the Blogy theme uses horizontal, square and vertical images).
+     */
+    public function imageUrl(string $ratio = 'horizontal'): string
+    {
+        if (filled($this->featured_image)) {
+            return Str::startsWith($this->featured_image, ['http://', 'https://', '/'])
+                ? $this->featured_image
+                : Storage::disk('public')->url($this->featured_image);
+        }
+
+        $ratio = in_array($ratio, ['horizontal', 'square', 'vertical'], true) ? $ratio : 'horizontal';
+
+        return asset("images/placeholders/post-{$ratio}.svg");
+    }
+
+    public function hasImage(): bool
+    {
+        return filled($this->featured_image);
     }
 }

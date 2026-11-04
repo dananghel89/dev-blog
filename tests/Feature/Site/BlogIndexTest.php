@@ -24,6 +24,7 @@ test('the blog index is paginated by 10, newest first', function () {
     $posts = collect(range(1, 12))->map(fn (int $i) => Post::factory()->published()->create([
         'title' => sprintf('Paged Post %02d', $i),
         'created_at' => now()->subMinutes(100 - $i),
+        'published_at' => now()->subMinutes(100 - $i),
     ]));
 
     $oldest = $posts->first();

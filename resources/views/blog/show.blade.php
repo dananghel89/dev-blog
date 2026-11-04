@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('title', $post->title)
-@section('meta_description', $post->excerpt)
+@section('meta_description', $post->excerpt ?? '')
 @section('meta_keywords', $post->tags->pluck('name')->implode(', '))
-@section('og_image', $post->featured_image)
+@section('og_image', $post->hasImage() ? $post->imageUrl() : asset('images/default-og.png'))
 
 @section('content')
     <!-- Post Header -->

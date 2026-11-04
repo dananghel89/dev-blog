@@ -97,16 +97,13 @@ Identity and content placeholders ("Your Name", `href="#"` social links, the mis
 ### Phase A – Safety first (no behaviour change)
 
 1. Work directly on `master`: commit and push each phase only after you confirm it (I show the files and message first), with no feature branch. Back up the DB (section 2).
-2. If the theme plan's Phase 0 hasn't already handled them, commit or discard the uncommitted changes first:
-   - `package-lock.json` (name `dev-blog` → `dev-blog`)
-   - the `.env.example` `APP_URL` line, which is fixed in R12
-   - `config/database.php` `'engine' => 'InnoDB'`: **commit it** (`fix: force InnoDB for MySQL tables`)
-3. **R24:**
-   - `.env.example` → `DB_CONNECTION=mysql`, `DB_HOST=127.0.0.1`, `DB_PORT=3306`, `DB_DATABASE=dev_blog`, `DB_USERNAME=root`, `DB_PASSWORD=` (no real password)
+2. ~~Commit the uncommitted changes~~: **done 2026-11-04**. Committed: `e6c1415 fix: force InnoDB for MySQL tables`, `4d2e9f7 chore: rename package-lock project to dev-blog` and `f8aab6b chore: switch .env.example to MySQL and dev-blog.test`.
+3. **R24** (partly done in `f8aab6b`):
+   - ~~`.env.example` → `DB_CONNECTION=mysql` with the `dev_blog` keys and an empty `DB_PASSWORD`~~: done
    - remove the `database.sqlite` line from `composer.json` `post-create-project-cmd`
    - delete the leftover `database/database.sqlite` (copy it outside the repo first if you want to keep it)
    - check that `.gitignore` still ignores `*.sqlite*`; the test DB is in memory, so no file is created
-4. **R12:** `APP_URL=http://dev-blog.test` in `.env`. In `.env.example`, set `APP_URL=http://localhost`, the skeleton default, which keeps local hostnames out of the public repo.
+4. ~~**R12**~~: **done 2026-11-04**. `.env` and `.env.example` both use `APP_URL=http://dev-blog.test`. You chose the real local vhost over `http://localhost`. It's a local-only hostname, so it's harmless in the public repo.
 5. Record the baseline: `php artisan route:list > ../routes-before.txt` and `php artisan test` (23 failures expected; this is the "before" state).
 
 ### Phase B – Remove the starter-kit leftovers (R01, R03, R16)

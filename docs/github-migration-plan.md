@@ -42,7 +42,7 @@ Plan order in `docs/`:
 ## 2. Prerequisites (already written into the earlier plans)
 
 1. **Commit messages** during the theme, review and branding plans are one-line `type: description`.
-2. **Neutral defaults** for personal values: `CONTACT_EMAIL`, `BLOG_AUTHOR`, the social URLs and `APP_URL` are read from `.env` with `example.com` / empty defaults (review-plan R10 and R12, branding-plan Phase 1). Your real values exist only in your local `.env`, which is never committed.
+2. **Neutral defaults** for personal values: `CONTACT_EMAIL`, `BLOG_AUTHOR`, and the social URLs are read from `.env` with `example.com` / empty defaults (review-plan R10, branding-plan Phase 1). `APP_URL=http://dev-blog.test` in `.env.example` is a local-only hostname, kept on purpose (review-plan R12). Your real values exist only in your local `.env`, which is never committed.
 
 ## 3. New commit messages
 
@@ -131,7 +131,7 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 - [ ] The commit count matches. Every commit shows your avatar, linked to `dananghel89`.
 - [ ] Open a few commits: the dates are original; the messages are as in section 3.
 - [ ] The README (review-plan R23, branding-plan credits) renders correctly, including the Blogy / Untree.co credit with the CC BY 3.0 link.
-- [ ] `.env.example` contains no real values (no `dev-blog.test`, no real email, no social URLs).
+- [ ] `.env.example` contains no real values (no real email, no password, no social URLs; the local `dev-blog.test` URL is fine).
 
 ### 4.7 Local cleanup
 

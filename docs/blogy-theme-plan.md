@@ -78,7 +78,7 @@ The theme's bio box isn't ported.
 
 1. Work directly on `master`; tag the starting point: `git tag pre-blogy` and `git push origin pre-blogy`.
 2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
-3. Commit or discard the uncommitted changes (`package-lock.json` name, `.env.example` `APP_URL`; see review-plan R12). Commit the `config/database.php` InnoDB fix (review-plan R24) as its own commit.
+3. ~~Commit the uncommitted changes~~: **done 2026-11-04** (`e6c1415`, `4d2e9f7`, `f8aab6b`: InnoDB fix, package-lock name, `.env.example` on MySQL and `dev-blog.test`). Check that `git status` is clean.
 4. Take screenshots of the current home, blog, post, about and contact pages for comparison (`../dev-blog-before/`).
 5. `npm install`, then `npm run build` → it works today (Tailwind + Flux CSS), and this is the reference.
 

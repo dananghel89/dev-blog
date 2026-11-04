@@ -3,7 +3,8 @@
 @section('title', $post->title)
 @section('meta_description', $post->excerpt ?? '')
 @section('meta_keywords', $post->tags->pluck('name')->implode(', '))
-@section('og_image', $post->hasImage() ? $post->imageUrl() : asset('images/default-og.png'))
+{{-- Absolute URL for crawlers: url() keeps full URLs and prefixes root-relative paths. --}}
+@section('og_image', $post->hasImage() ? url($post->imageUrl()) : asset('images/default-og.png'))
 
 @section('content')
     @php($shareUrl = urlencode($post->url))

@@ -27,6 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', config('project.name'))">
     <meta name="twitter:description" content="@yield('meta_description', config('project.tagline'))">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/default-og.png'))">
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="192x192">

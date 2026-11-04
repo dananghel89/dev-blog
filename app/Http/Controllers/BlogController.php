@@ -20,15 +20,14 @@ class BlogController extends Controller
 
     public function show(Post $post)
     {
-        if (! $post->is_published) {
-            abort(404);
-        }
+        // Same rule as every list: published AND the publish date has passed (scheduled posts stay hidden).
+        abort_unless(Post::published()->whereKey($post->getKey())->exists(), 404);
 
         $relatedPosts = Post::published()
             ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
             ->with('category')
-            ->latest()
+            ->latest('published_at')
             ->take(4)
             ->get();
 

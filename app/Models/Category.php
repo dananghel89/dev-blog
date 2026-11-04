@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUniqueSlug;
 
     /**
      * The attributes that are mass assignable.
@@ -20,18 +20,9 @@ class Category extends Model
         'color'
     ];
 
-    /**
-     * Automatically create slug from name
-     */
-    protected static function boot()
+    protected function slugSource(): string
     {
-        parent::boot();
-        
-        static::creating(function ($category) {
-            if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
-            }
-        });
+        return 'name';
     }
 
     /**
@@ -42,13 +33,6 @@ class Category extends Model
         return $this->hasMany(Post::class);
     }
 
-    /**
-     * Get only published posts in this category
-     */
-    public function publishedPosts()
-    {
-        return $this->hasMany(Post::class)->published();
-    }
 
     /**
      * Get the category URL
@@ -58,11 +42,4 @@ class Category extends Model
         return route('blog.category', $this->slug);
     }
 
-    /**
-     * Get post count
-     */
-    public function getPostCountAttribute()
-    {
-        return $this->publishedPosts()->count();
-    }
 }

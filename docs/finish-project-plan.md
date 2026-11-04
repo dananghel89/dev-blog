@@ -9,7 +9,7 @@ This is the **sixth** plan. Start it only when all earlier plans are merged into
 
 1. [blogy-theme-plan.md](blogy-theme-plan.md): the public site in the Blogy theme (Vite + Sass, Bootstrap 5.3 from npm), Livewire components for the post list, search and contact form, and the Untree.co footer credit.
 2. [project-review-fix-plan.md](project-review-fix-plan.md): bug fixes, Pest test suite, starter kit (Fortify, Flux) removed, newsletter/legal pages failing cleanly.
-3. [branding-assets-plan.md](branding-assets-plan.md): identity in `config/project.php`, own favicon, default OG image.
+3. [branding-assets-plan.md](branding-assets-plan.md) (done): identity in `config/project.php`, own favicon, default OG image.
 4. [github-migration-plan.md](github-migration-plan.md): repo moved to GitHub (public), history rewritten.
 5. [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md): Laravel 13, Livewire 4.4, Vite 8, Pest 5, skeleton-aligned config.
 6. **This plan:** builds the admin and the missing features directly on the upgraded stack.

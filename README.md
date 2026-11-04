@@ -21,7 +21,17 @@ php artisan migrate:fresh --seed   # demo categories, tags and posts
 composer dev                       # local server, queue, logs and Vite
 ```
 
-Set your own values in `.env` (never committed), e.g. `CONTACT_EMAIL` for the contact form.
+Set your own values in `.env` (never committed). The repository only holds neutral defaults (`config/project.php`):
+
+| Key | Used for |
+|---|---|
+| `APP_NAME` | Site name: logo, page titles, footer, emails |
+| `BLOG_TAGLINE` | Default meta description, About cover |
+| `BLOG_AUTHOR` | Meta author, the About greeting |
+| `CONTACT_EMAIL` | Recipient of the contact form |
+| `SOCIAL_GITHUB`, `SOCIAL_LINKEDIN`, `SOCIAL_X`, `SOCIAL_STACKOVERFLOW` | Profile URLs; empty networks are hidden |
+
+To show your photo on the About page, add `public/images/avatar.jpg`.
 
 ## Tests
 
@@ -37,3 +47,5 @@ Tests run on an in-memory SQLite database, so they never touch your MySQL data.
 - [Bootstrap](https://getbootstrap.com) and [Bootstrap Icons](https://icons.getbootstrap.com) (MIT)
 - [Work Sans](https://fontsource.org/fonts/work-sans) (SIL Open Font License 1.1)
 - [AOS](https://github.com/michalsnik/aos) (MIT)
+
+The project's own code, icon and images are proprietary (all rights reserved); the theme and libraries above keep their own licenses.

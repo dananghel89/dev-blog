@@ -1,13 +1,13 @@
 # Plan: branding and third-party assets
 
-Status: **Draft – Phase 2 (favicon) done early on 2026-11-04; the other phases not started**
+Status: **Done (2026-11-04)**. Phase 2 (favicon) ran first; findings and deviations in section 5.
 Created: 2026-11-04 · Revised: 2026-11-04 (Blogy theme plan added as priority 1: assets now come from npm via Vite; placeholders moved to the theme plan)
 
 > This is a technical checklist based on the published license texts, not legal advice.
 
 This plan takes the place of agency-cms's theme-licensing plan. The theme license itself (Blogy by Untree.co, CC BY 3.0, footer credit, no redistribution) is handled in [blogy-theme-plan.md](blogy-theme-plan.md), section 2. What's left here:
 - check the notices of the npm libraries
-- replace the assets that aren't yours (the Laravel favicon: **done**, Phase 2)
+- replace the assets that aren't yours (the Laravel favicon)
 - fill in the placeholder identity ("Your Name", `href="#"` links, fake handles)
 - add the missing default OG image
 
@@ -31,7 +31,7 @@ This plan takes the place of agency-cms's theme-licensing plan. The theme licens
 | AOS | npm, bundled | MIT | |
 | `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png` | `public/` | Your own artwork (code-brackets icon) | **Replaced 2026-11-04** (Phase 2). The Laravel files are gone, including `favicon.svg`. The theme's `favicon.png` was never used (theme plan) |
 | Placeholder images | `public/images/placeholders/*.svg` | Your own (made in the theme plan, Phase 3) | They replace `placehold.co` and the theme's demo photos |
-| Default OG image | `layouts/app.blade.php` → `images/default-og.png` | – | **The file doesn't exist**, so shares without a featured image show no picture |
+| Default OG image | `public/images/default-og.png` | Your own (Phase 4) | **Created 2026-11-04** (1200×630). Before, the file didn't exist, so shares without a featured image showed no picture |
 | Laravel framework, Livewire, Filament (finish plan) | `vendor/` | MIT | No notice to add: the license stays inside `vendor/` |
 
 **No CDNs** after the theme plan: every CSS, JS and font file is served from your own domain. The privacy policy (finish plan) doesn't need to list any asset CDN.
@@ -63,7 +63,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 
 ## 4. Phases
 
-### Phase 1 – Identity in one place
+### Phase 1 – Identity in one place (done)
 
 1. Extend `config/project.php` (created by review-plan R10). Every value comes from `.env` and has a **neutral default**, so the public repo contains no personal values:
    ```php
@@ -103,19 +103,19 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 4. The layout links `favicon.ico` (`sizes="48x48"`), `favicon.png` (`type="image/png" sizes="192x192"`) and the touch icon. `LayoutTest` checks the links and that the three files exist.
 5. The Filament admin (finish plan) uses `favicon.png`.
 
-### Phase 3 – Placeholders (moved)
+### Phase 3 – Placeholders (moved; About avatar done)
 
 Done in [blogy-theme-plan.md](blogy-theme-plan.md), Phase 3: local SVGs in three ratios, `Post::imageUrl()`, and `PostFactory` without `placehold.co`. Here, only:
 1. About: show your photo if `public/images/avatar.jpg` exists; otherwise `avatar.svg`.
 2. Check: `grep -rn "placehold.co" app database resources` → nothing.
 
-### Phase 4 – Default Open Graph image
+### Phase 4 – Default Open Graph image (done)
 
 1. Create `public/images/default-og.png` (1200×630): the theme primary background, the brand name in Work Sans and the tagline. Generate it once with a small PHP GD script run from outside the repo (GD is enabled in PHP 8.4), or design it yourself.
 2. Layout: `og:image` falls back to `default-og.png` when a post has no featured image. Today an empty `featured_image` yields `content=""`. Also add `twitter:image`, and absolute URLs (`asset()` is absolute once `APP_URL` is right, see review-plan R12).
 3. Check with a local OG preview (view source) and, after deployment, the LinkedIn Post Inspector.
 
-### Phase 5 – Credits check and wrap up
+### Phase 5 – Credits check and wrap up (done)
 
 1. `npm run build`, then check that the compiled CSS/JS in `public/build/assets/` still contains the `/*!` banners: Blogy/Untree.co, Bootstrap and Bootstrap Icons.
 2. README "Credits": the Blogy line from the theme plan, then Bootstrap, Bootstrap Icons, Work Sans (OFL 1.1), AOS.
@@ -127,11 +127,24 @@ Done in [blogy-theme-plan.md](blogy-theme-plan.md), Phase 3: local SVGs in three
 
 | Phase | Commit | Result |
 |---|---|---|
-| Identity | – | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links |
-| Favicon | – | Own favicon (ICO, PNG, touch icon). Done 2026-11-04 |
-| Placeholders | – | Done in the theme plan; About avatar |
-| OG image | – | `default-og.png`, with a working fallback |
-| Credits | – | Banners checked in the build, README credits, `"license": "proprietary"` |
+| Favicon | `6305f22`, `ec7a1c2` | Own favicon (ICO 16/32/48, PNG 192, touch icon 180); the Laravel files and `favicon.svg` are gone |
+| Identity | `378bc09` | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links; `BrandingTest` |
+| Placeholders | `7428765` | Done in the theme plan; About shows `public/images/avatar.jpg` when it exists |
+| OG image | `a1f6ef3` | `default-og.png`, absolute `og:image` and `twitter:image`, with a working fallback; `OpenGraphTest` |
+| Credits | the closing commit | Banners checked in the build, README credits and `.env` keys, `"license": "proprietary"`, `CLAUDE.md` |
+
+### Findings and deviations
+
+| # | Where | Finding | Resolution |
+|---|---|---|---|
+| G01 | Source icon | The `</>` glyph in the source PNG is **transparent**, not white: it only looks white on a white viewer. On a dark browser tab the glyph turned dark, and on the OG image it vanished into the gradient | A white disc is placed under the circle before resampling (a few pixels inside, so the anti-aliased rim stays transparent). The favicons were regenerated (`ec7a1c2`) |
+| G02 | Header | The mobile menu toggle was an `<a href="#">`, which the "no `href="#"`" rule also covers | It's a `<button type="button">` now, with the browser button styles reset in `app/_content.scss`; `navbar.js` is unchanged |
+| G03 | Social links | The footer had four networks; the plan listed three | `SOCIAL_STACKOVERFLOW` added, so all four can be set. With none set, the footer's *Social* block is left out entirely. About and Contact use the same partial with `.social-inline` (the footer's white squares are invisible on light backgrounds) |
+| G04 | Post `og:image` | A root-relative `featured_image` (`/images/x.jpg`) was shared as a relative URL, which crawlers ignore | `blog/show` wraps it in `url()`; `OpenGraphTest` covers both forms |
+| G05 | Tagline | The planned default "Full stack development blog" repeated the page titles | Default `Real problems and solutions from full stack development`, also baked into the OG image. The image is static: regenerate it if the name or tagline changes (until the finish plan's settings page) |
+| G06 | Contact email | The old indigo colours | The theme's primary/secondary; the dot and subtitle use light tints so they stay visible on the gradient header |
+| G07 | Fonts for GD | Fontsource ships only WOFF/WOFF2, and GD needs a TTF | The generator unwraps the WOFF 1.0 files from `node_modules` (zlib per table) into temporary TTFs outside the repo; no font file is committed |
+| G08 | AOS notice | AOS's bundled CSS/JS carries no `/*!` banner, unlike Bootstrap | Credited in the README (MIT); nothing to keep in the build |
 
 ## 6. Sources
 

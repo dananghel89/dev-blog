@@ -151,8 +151,8 @@
                                 </div>
                                 <div>
                                     <h6 class="mb-1 text-white">Email</h6>
-                                    <a href="mailto:hello@example.com" class="text-secondary text-decoration-none">
-                                        hello@example.com
+                                    <a href="mailto:{{ config('project.contact_email') }}" class="text-secondary text-decoration-none">
+                                        {{ config('project.contact_email') }}
                                     </a>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
                                 <div>
                                     <h6 class="mb-1 text-white">GitHub</h6>
                                     <a href="#" class="text-secondary text-decoration-none">
-                                        github.com/example
+                                        GitHub
                                     </a>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                                 <div>
                                     <h6 class="mb-1 text-white">Twitter/X</h6>
                                     <a href="#" class="text-secondary text-decoration-none">
-                                        @example
+                                        X (Twitter)
                                     </a>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
                                 <div>
                                     <h6 class="mb-1 text-white">LinkedIn</h6>
                                     <a href="#" class="text-secondary text-decoration-none">
-                                        linkedin.com/in/example
+                                        LinkedIn
                                     </a>
                                 </div>
                             </div>

@@ -217,7 +217,7 @@
     <div class="email-container">
         <!-- Header -->
         <div class="email-header">
-            <h1 class="logo">Dev Blog</h1>
+            <h1 class="logo">{{ config('app.name') }}</h1>
             <p class="header-title">Full Stack Development Blog</p>
             <span class="date-badge">
                 📅 {{ now()->format('F j, Y') }} at {{ now()->format('g:i A') }}
@@ -304,7 +304,7 @@
         <!-- Footer -->
         <div class="email-footer">
             <p class="footer-text">
-                This message was sent from the contact form on <strong>Dev Blog</strong>
+                This message was sent from the contact form on <strong>{{ config('app.name') }}</strong>
             </p>
             
             <div class="social-links">
@@ -315,7 +315,7 @@
             </div>
             
             <p class="footer-text" style="margin-top: 20px; font-size: 12px;">
-                © {{ date('Y') }} Dev Blog. All rights reserved.<br>
+                © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
                 <span style="color: #999;">Built with Laravel and ❤️</span>
             </p>
         </div>

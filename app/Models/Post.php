@@ -65,7 +65,7 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-                     ->where('published_at', '<=', now());
+            ->where('published_at', '<=', now());
     }
 
     /**
@@ -90,7 +90,8 @@ class Post extends Model
     public function getReadingTimeAttribute()
     {
         $wordCount = str_word_count(strip_tags($this->content));
-        return max(1, ceil($wordCount / 200)) . ' min read';
+
+        return max(1, ceil($wordCount / 200)).' min read';
     }
 
     /**

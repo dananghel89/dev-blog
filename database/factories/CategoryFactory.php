@@ -32,7 +32,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => Str::slug($name) . '-' . fake()->unique()->numberBetween(1, 999), // Make slug unique
+            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1, 999), // Make slug unique
             'description' => fake()->sentence(),
             'color' => self::COLORS[$name],
         ];

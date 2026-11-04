@@ -25,7 +25,7 @@ This plan takes the place of agency-cms's theme-licensing plan. The theme licens
 | Asset | Where | License / owner | Notes |
 |---|---|---|---|
 | Blogy theme (SCSS partials, navbar script) | `resources/scss/theme/`, `resources/js/theme/` | CC BY 3.0, © Untree.co | Footer credit + `/*! */` banners + README credit (theme plan, section 2) |
-| Bootstrap 5.3 (SCSS + JS) | npm, bundled by Vite | MIT, © The Bootstrap Authors | The `/*! Bootstrap … MIT */` banner survives the build |
+| Bootstrap 5.3 (SCSS + JS) | npm, bundled by Vite | MIT, © The Bootstrap Authors | The `/*! Bootstrap … MIT */` banner survives the build (`esbuild.legalComments: 'inline'` in `vite.config.js`) |
 | Bootstrap Icons | npm, bundled by Vite (font files emitted to `public/build`) | MIT | Banner in the bundled CSS |
 | Work Sans | npm `@fontsource/work-sans`, bundled | SIL OFL 1.1 | The font files are redistributed in the build; OFL allows it. The license stays in `node_modules`, and the README credits the font |
 | AOS | npm, bundled | MIT | |
@@ -54,7 +54,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 | Item | Required? | Decision |
 |---|---|---|
 | Untree.co footer credit, CC BY 3.0 attribution | **Yes** (their license) | Done in the theme plan; must never be removed |
-| Keep the MIT notices of Bootstrap / Icons / AOS | **Yes** (MIT condition) | Met by the `/*!` banners that survive the Vite build. Check in Phase 5 |
+| Keep the MIT notices of Bootstrap / Icons / AOS | **Yes** (MIT condition) | Met by the `/*!` banners, which survive the Vite build thanks to `esbuild.legalComments: 'inline'` (theme plan, Phase 2). Check in Phase 5 |
 | OFL notice for Work Sans | Yes, when redistributing the font files | README credit + the license in the npm package |
 | Credit the libraries in the README | No (nice to have) | README "Credits": Blogy/Untree.co (required), Bootstrap, Bootstrap Icons, Work Sans, AOS |
 | Replace the Laravel favicon | No, but it's Laravel's logo, not your brand | **Replace** (Phase 2) |

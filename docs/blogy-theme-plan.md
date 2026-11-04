@@ -34,7 +34,7 @@ Priority: **1, runs first.** Then [project-review-fix-plan.md](project-review-fi
 | CC BY 3.0: use for personal and commercial projects, change it however you like | The theme is adapted into Blade views and app SCSS/JS |
 | **You can't remove the Untree.co backlink from the footer** of every template (unless you pay $19 for a single website) | The footer partial is shared by **every** public page and always renders the credit line from the theme: *"Designed with love by [Untree.co](https://untree.co)"*, plus *"Distributed by [ThemeWagon](https://themewagon.com)"*, kept as in the original footer. The credit is hard-coded in the partial, not a setting, so it can't be switched off by accident. A test checks it on every public page |
 | **You can't redistribute the templates** | The repo contains **only the adapted theme code inside the application**, never the template package: no `*.html` demo pages, no demo images, no `favicon.png`, no `prepros-6.config`, no IcoMoon/Flaticon fonts, no copy of the theme's bundled Bootstrap/plugin files. Only Untree.co's own SCSS partials and navbar script are copied, modified, into `resources/` |
-| CC BY 3.0 attribution: credit the author, link the license, and mark changes | (1) The `/*! … */` header comment is kept at the top of every SCSS/JS file taken from the theme, with "Modified for Dev Blog" added. `/*!` comments survive the Vite build, so the credit is also in the compiled CSS/JS. (2) README "Credits": *Design based on the Blogy template by Untree.co (https://untree.co), licensed CC BY 3.0, modified.* |
+| CC BY 3.0 attribution: credit the author, link the license, and mark changes | (1) The `/*! … */` header comment is kept at the top of every SCSS/JS file taken from the theme, with "Modified for Dev Blog" added. Vite's minifier drops these comments by default; `esbuild: { legalComments: 'inline' }` in `vite.config.js` keeps them (found and fixed in Phase 2, 2026-11-04), so the credit is also in the compiled CSS/JS. (2) README "Credits": *Design based on the Blogy template by Untree.co (https://untree.co), licensed CC BY 3.0, modified.* |
 
 The original download stays **outside** the repo (`Downloads\webs\blogy-v1.0.0`) and is used only as the reference while converting.
 
@@ -114,6 +114,7 @@ The full suite is red today because of the starter-kit tests (review-plan R03), 
      ```js
      css: { preprocessorOptions: { scss: { quietDeps: true, silenceDeprecations: [/* only IDs the build prints, e.g. 'import' */] } } }
      ```
+   - add `esbuild: { legalComments: 'inline' }`: without it, the minifier strips the `/*!` license banners (Untree.co, Bootstrap, Bootstrap Icons) from the build
    - keep `refresh: true` and the `storage/framework/views` watch-ignore
 3. **SCSS** (`resources/scss/app.scss`):
    - the theme header comment (`/*! … modified */`), then the theme variables (`$font-family-sans-serif: 'Work Sans'`, `$primary`, `$secondary`)

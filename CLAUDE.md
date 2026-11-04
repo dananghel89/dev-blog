@@ -56,11 +56,13 @@ Planned work lives in `docs/`, in this order:
 1. `blogy-theme-plan.md` (priority 1, phases 0–8 done): the Blogy theme, Vite + Sass, the Livewire components.
 2. `project-review-fix-plan.md` (done): bug fixes, Pest suite, removal of Fortify/Flux.
 3. `branding-assets-plan.md` (done): identity in `config/project.php`, own favicon, default OG image.
-4. `github-migration-plan.md`: Bitbucket → public GitHub, history rewritten to the noreply identity and scrubbed of the old brand.
+4. `github-migration-plan.md` (done): Bitbucket → public GitHub, history rewritten to the noreply identity and scrubbed of the old brand.
 5. `laravel-13-upgrade-plan.md`: Laravel 13, Livewire 4.4, Vite 8, Pest 5.
 6. `finish-project-plan.md`: Filament 5 admin, Markdown posts, double-opt-in newsletter, moderated comments, settings, feeds.
 
 Each plan works directly on `master`, one commit per phase, and only after the user approves. Commit messages are one-line `type: description`.
+
+**Repository.** Public on GitHub: `origin` = `https://github.com/dananghel89/dev-blog.git`, branch `master`. Commits use the noreply identity `7040327+dananghel89@users.noreply.github.com`, picked up automatically from `~/.gitconfig-github` (an `includeIf` on GitHub remotes); check `git config user.email` before committing. Never commit a real email address, the old brand, `.env`, or original Blogy template files: everything pushed is public.
 
 ## Known gaps (planned)
 

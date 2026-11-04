@@ -1,6 +1,6 @@
 # Plan: move the repository from Bitbucket to GitHub
 
-Status: **Draft – not started**
+Status: **Done (2026-11-04)**, except the Bitbucket deletion (4.9, yours). Findings and deviations in section 7.
 Created: 2026-11-04
 Model: the agency-cms migration (2026-10-31 → 2026-11-02), done the same way: rewrite the history to the GitHub noreply address with one-line messages, push to GitHub, review it as a visitor, make it public, then delete Bitbucket.
 
@@ -192,12 +192,12 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 
 ## 5. Checklist (end state)
 
-- [ ] `git remote -v` → only `origin = https://github.com/dananghel89/dev-blog.git`
-- [ ] All commits use the noreply address and one-line `type: description` messages
-- [ ] No gmail address in the history
-- [ ] The GitHub repo is public, with Issues/Wiki/Projects/Discussions off
-- [ ] The Bitbucket repo is deleted; the local bundle is deleted (or kept until after the upgrade)
-- [ ] `php artisan test` green on the GitHub `master`
+- [x] `git remote -v` → only `origin = https://github.com/dananghel89/dev-blog.git`
+- [x] All commits use the noreply address and one-line `type: description` messages
+- [x] No gmail address in the history
+- [x] The GitHub repo is public, with Issues/Wiki/Projects/Discussions off
+- [ ] The Bitbucket repo is deleted (you, in the browser); the local bundle `../dev-blog-pre-github-20261104.bundle` is deleted (or kept until after the upgrade)
+- [x] `php artisan test` green on the GitHub `master` (95 tests)
 
 ## 6. Rollback
 
@@ -206,3 +206,24 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 | Rewrite looks wrong (before push) | `git reset --hard refs/original/refs/heads/master`, or restore from the bundle: `git fetch ../dev-blog-pre-github-*.bundle master:master --force` (after `git checkout --detach`) |
 | Push went wrong (repo still private) | Delete and recreate the GitHub repo in the browser, then push again. **No force-push without asking** |
 | Anything else before 4.9 | Bitbucket is untouched and stays the source of truth until it is deleted |
+
+## 7. Result (2026-11-04)
+
+| Step | Result |
+|---|---|
+| 4.1 Pre-flight | `master` = Bitbucket `master` (31 commits), 95 tests green, bundle `../dev-blog-pre-github-20261104.bundle` created and verified |
+| 4.2 GitHub repo | Created by you, **public from the start** (your decision on 2026-11-04, instead of private first). It was empty, so the push needed no force. Issues, Wiki, Projects and Discussions were already off |
+| 4.3 Rewrite | Dry run on a scratch clone first, then the same commands on the repo: both produced the same tip, so the dry-run checks apply 1:1 |
+| 4.4 Verify | 31 commits; one identity (noreply, author and committer); the two original messages renamed; 0 gmail identities; 0 old-brand hits in any commit; only files that held the old brand changed (views, controller, Mailable, the theme banners, `package-lock.json`, `docs/*.md`); author and committer dates unchanged; tests green |
+| 4.5 Push | `origin` = GitHub, `user.email` = the noreply address, `git push -u origin master` |
+| 4.6 / 4.8 Visitor checks | Checked through the public GitHub API before and after the push: 31 commits, all linked to `dananghel89`; README served; no template files (`.html`, `prepros`, IcoMoon, Flaticon, demo images) in any commit; every file in `resources/scss/theme/` and `resources/js/theme/` keeps its Untree.co header; `.env` never committed; `.env.example` holds only neutral values |
+| 4.7 Cleanup | Local `bitbucket` remote removed, `refs/original` deleted, reflog expired and `gc --prune=now`: the local repo only holds the noreply identity. The dry-run clone and the scrub script were deleted |
+
+### Findings and deviations
+
+| # | Finding | Resolution |
+|---|---|---|
+| H01 | Besides the old brand, one sentence of this plan (27 commits) named your **local Bitbucket address** on your own domain. It isn't the old brand, so the planned rules didn't catch it, but it is a real email address | One extra rule in the scrub script replaced it with "your Bitbucket address"; check 4.4.5 was extended to it (0 hits) |
+| H02 | `composer.lock` contains `@gmail.com` addresses in every commit | They are the public author addresses of third-party packages (Composer metadata), not yours. Kept; your own address appears nowhere |
+| H03 | The repo was public before the push, so there was no private review window | All visitor checks (4.6, 4.8) ran locally on the rewritten history **before** the push, then again on GitHub |
+| H04 | Repo description and topics are empty | Optional (4.8.3), yours to add in the browser |

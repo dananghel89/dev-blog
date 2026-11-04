@@ -15,6 +15,17 @@ test('the layout loads assets through Vite, not from CDNs', function () {
         ->not->toContain('js/script.js');
 });
 
+test('the layout links the site favicons, and the files exist', function () {
+    $html = $this->get(route('home'))->assertOk()->getContent();
+
+    foreach (['favicon.ico', 'favicon.png', 'apple-touch-icon.png'] as $file) {
+        expect($html)->toContain(asset($file))
+            ->and(public_path($file))->toBeFile();
+    }
+
+    expect($html)->not->toContain('favicon.svg');
+});
+
 test('public pages use the Dev Blog name', function (string $route) {
     config(['app.name' => 'Dev Blog']);
 

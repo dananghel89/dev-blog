@@ -1,13 +1,13 @@
 # Plan: branding and third-party assets
 
-Status: **Draft – not started**
+Status: **Draft – Phase 2 (favicon) done early on 2026-11-04; the other phases not started**
 Created: 2026-11-04 · Revised: 2026-11-04 (Blogy theme plan added as priority 1: assets now come from npm via Vite; placeholders moved to the theme plan)
 
 > This is a technical checklist based on the published license texts, not legal advice.
 
 This plan takes the place of agency-cms's theme-licensing plan. The theme license itself (Blogy by Untree.co, CC BY 3.0, footer credit, no redistribution) is handled in [blogy-theme-plan.md](blogy-theme-plan.md), section 2. What's left here:
 - check the notices of the npm libraries
-- replace the assets that aren't yours (the Laravel favicon)
+- replace the assets that aren't yours (the Laravel favicon: **done**, Phase 2)
 - fill in the placeholder identity ("Your Name", `href="#"` links, fake handles)
 - add the missing default OG image
 
@@ -29,7 +29,7 @@ This plan takes the place of agency-cms's theme-licensing plan. The theme licens
 | Bootstrap Icons | npm, bundled by Vite (font files emitted to `public/build`) | MIT | Banner in the bundled CSS |
 | Work Sans | npm `@fontsource/work-sans`, bundled | SIL OFL 1.1 | The font files are redistributed in the build; OFL allows it. The license stays in `node_modules`, and the README credits the font |
 | AOS | npm, bundled | MIT | |
-| `public/favicon.ico`, `favicon.svg`, `apple-touch-icon.png` | `public/` | **Laravel logo** | Comes with the Laravel skeleton. Not your artwork, so it should be replaced. The theme's `favicon.png` is **not** used (theme plan) |
+| `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png` | `public/` | Your own artwork (code-brackets icon) | **Replaced 2026-11-04** (Phase 2). The Laravel files are gone, including `favicon.svg`. The theme's `favicon.png` was never used (theme plan) |
 | Placeholder images | `public/images/placeholders/*.svg` | Your own (made in the theme plan, Phase 3) | They replace `placehold.co` and the theme's demo photos |
 | Default OG image | `layouts/app.blade.php` → `images/default-og.png` | – | **The file doesn't exist**, so shares without a featured image show no picture |
 | Laravel framework, Livewire, Filament (finish plan) | `vendor/` | MIT | No notice to add: the license stays inside `vendor/` |
@@ -57,7 +57,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 | Keep the MIT notices of Bootstrap / Icons / AOS | **Yes** (MIT condition) | Met by the `/*!` banners, which survive the Vite build thanks to `esbuild.legalComments: 'inline'` (theme plan, Phase 2). Check in Phase 5 |
 | OFL notice for Work Sans | Yes, when redistributing the font files | README credit + the license in the npm package |
 | Credit the libraries in the README | No (nice to have) | README "Credits": Blogy/Untree.co (required), Bootstrap, Bootstrap Icons, Work Sans, AOS |
-| Replace the Laravel favicon | No, but it's Laravel's logo, not your brand | **Replace** (Phase 2) |
+| Replace the Laravel favicon | No, but it's Laravel's logo, not your brand | **Replaced** (Phase 2, done) |
 | Project license | No | As in agency-cms: no `LICENSE` file; `composer.json` `"license": "proprietary"`. Your code is "all rights reserved"; the theme and libraries keep their own licenses |
 | Fake social handles | – | **Removed** unless you give the real URL (Phase 1) |
 
@@ -92,12 +92,16 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
    - the Untree.co credit is still present (it's also covered by `ThemeCreditTest`)
 7. The finish plan later moves these values into an editable **Site settings** page in Filament, with these config values as the defaults.
 
-### Phase 2 – Favicon
+### Phase 2 – Favicon (done 2026-11-04, ahead of the other phases)
 
-1. A new SVG favicon: an "A." monogram in the theme's primary `#214252` with a white dot, matching the logo style.
-2. Export `favicon.ico` (32×32 and 16×16) and `apple-touch-icon.png` (180×180) from the SVG. Replace the three Laravel files.
-3. The layout references `favicon.svg` (`type="image/svg+xml"`), `favicon.ico` and the touch icon.
-4. Check the tab icon in Chrome and Firefox, in light and dark OS mode.
+1. Source: your own icon, a white `</>` on a circle with the theme's gradient (`#214252` → `#4D4C7D`), 416×415 PNG. Only the generated files are committed, not the source.
+2. Generated once with a PHP GD script run from outside the repo (source padded to a square, then resampled):
+   - `public/favicon.ico`: 16×16, 32×32 and 48×48, PNG-compressed entries
+   - `public/favicon.png`: 192×192, transparent corners
+   - `public/apple-touch-icon.png`: 180×180 on a white background (iOS turns transparency black)
+3. The Laravel files are replaced, and `favicon.svg` (Laravel logo) is deleted: there is no SVG version of the icon.
+4. The layout links `favicon.ico` (`sizes="48x48"`), `favicon.png` (`type="image/png" sizes="192x192"`) and the touch icon. `LayoutTest` checks the links and that the three files exist.
+5. The Filament admin (finish plan) uses `favicon.png`.
 
 ### Phase 3 – Placeholders (moved)
 
@@ -124,7 +128,7 @@ Done in [blogy-theme-plan.md](blogy-theme-plan.md), Phase 3: local SVGs in three
 | Phase | Commit | Result |
 |---|---|---|
 | Identity | – | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links |
-| Favicon | – | Own favicon (SVG, ICO, touch icon) |
+| Favicon | – | Own favicon (ICO, PNG, touch icon). Done 2026-11-04 |
 | Placeholders | – | Done in the theme plan; About avatar |
 | OG image | – | `default-og.png`, with a working fallback |
 | Credits | – | Banners checked in the build, README credits, `"license": "proprietary"` |

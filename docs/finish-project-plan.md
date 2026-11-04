@@ -68,7 +68,7 @@ Prerequisite check (Phase 0) before any work:
    - `->login()`, `->passwordReset()`, `->profile()`
    - `->multiFactorAuthentication([AppAuthentication::make()->recoverable()])`, plus the migration the Filament docs give for the `app_authentication_secret` / `app_authentication_recovery_codes` columns on `users`
    - **no** `->registration()`
-   - `->brandName(config('app.name'))`, `->favicon(asset('favicon.svg'))`, `->colors(['primary' => Color::hex('#214252')])` (Blogy's primary), dark mode available in the admin
+   - `->brandName(config('app.name'))`, `->favicon(asset('favicon.png'))`, `->colors(['primary' => Color::hex('#214252')])` (Blogy's primary), dark mode available in the admin
 3. **Access:** `User implements FilamentUser` with `canAccessPanel(Panel $panel): bool` → `true` (single admin role; users only come from the seeder or the CLI). Without this, Filament returns 403 in production.
 4. **Seeded admin:** `AdminUserSeeder` creates `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (defaults `admin@example.com` / `password`, read through `config('project.seed')`), with `email_verified_at = now()`. Document both keys in `.env.example`; your real values go only in the local `.env`.
 5. Password-reset mails use the existing mail settings (`MAIL_MAILER=log` locally).

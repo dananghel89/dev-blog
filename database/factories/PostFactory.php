@@ -104,6 +104,17 @@ public function processQueueFixed()
         ]);
     }
 
+    /**
+     * Published, but with a publish date in the future: not visible until then.
+     */
+    public function scheduled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_published' => true,
+            'published_at' => fake()->dateTimeBetween('+1 day', '+30 days'),
+        ]);
+    }
+
     public function unpublished(): static
     {
         return $this->state(fn (array $attributes) => [

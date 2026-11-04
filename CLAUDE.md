@@ -64,5 +64,5 @@ Each plan works directly on `master`, one commit per phase, and only after the u
 
 - No login or admin: Filament 5 in the finish plan.
 - No privacy, terms, sitemap, RSS or newsletter: their routes were removed (real 404s) and are rebuilt in the finish plan.
-- No default OG image (`public/images/default-og.png`), the Laravel favicon, `"Your Name"` and `href="#"` social links: the branding plan.
+- No default OG image (`public/images/default-og.png`), `"Your Name"` and `href="#"` social links: the branding plan. (Its favicon phase is done: `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png` are the site's own icon.)
 - Post content is seeded HTML printed with `{!! !!}`: switches to Markdown with raw HTML stripped in the finish plan.

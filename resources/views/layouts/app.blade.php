@@ -27,7 +27,8 @@
     <meta name="twitter:title" content="@yield('title', config('app.name'))">
     <meta name="twitter:description" content="@yield('meta_description', 'Full-stack development blog')">
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="192x192">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])

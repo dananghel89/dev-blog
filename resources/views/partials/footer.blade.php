@@ -1,117 +1,73 @@
-<footer class="footer bg-black text-light py-5 mt-auto border-top border-secondary">
+{{-- Footer based on the Blogy template by Untree.co (CC BY 3.0), modified. --}}
+<footer class="site-footer">
     <div class="container">
-        <!-- Main Footer Content -->
-        <div class="row g-4">
-            <!-- About Section -->
-            <div class="col-lg-4 col-md-6">
-                <h5 class="fw-bold mb-3">
-                    Dev Blog
-                </h5>
-                <p class="text-secondary">
-                    A personal blog documenting daily development challenges and solutions 
-                    in PHP, MySQL, HTML, CSS, and JavaScript. Real problems, real solutions.
-                </p>
-                <div class="mt-3">
-                    <p class="mb-1"><i class="bi bi-envelope-fill text-primary me-2"></i> hello@example.com</p>
-                    <p><i class="bi bi-github text-primary me-2"></i> github.com/example</p>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="widget">
+                    <h3 class="mb-4">About</h3>
+                    <p>A personal blog documenting daily development challenges and solutions in PHP, MySQL, HTML, CSS, and JavaScript. Real problems, real solutions.</p>
+                </div>
+                <div class="widget">
+                    <h3>Social</h3>
+                    <ul class="list-unstyled social">
+                        <li><a href="#" aria-label="GitHub"><span class="bi bi-github"></span></a></li>
+                        <li><a href="#" aria-label="X (Twitter)"><span class="bi bi-twitter-x"></span></a></li>
+                        <li><a href="#" aria-label="LinkedIn"><span class="bi bi-linkedin"></span></a></li>
+                        <li><a href="#" aria-label="Stack Overflow"><span class="bi bi-stack-overflow"></span></a></li>
+                    </ul>
                 </div>
             </div>
-            
-            <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6">
-                <h5 class="fw-bold mb-3">Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <a href="{{ route('home') }}" class="text-secondary text-decoration-none hover-text-primary">
-                            <i class="bi bi-chevron-right small me-1"></i> Home
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('about') }}" class="text-secondary text-decoration-none hover-text-primary">
-                            <i class="bi bi-chevron-right small me-1"></i> About
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('blog.index') }}" class="text-secondary text-decoration-none hover-text-primary">
-                            <i class="bi bi-chevron-right small me-1"></i> Blog
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('contact') }}" class="text-secondary text-decoration-none hover-text-primary">
-                            <i class="bi bi-chevron-right small me-1"></i> Contact
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('privacy') }}" class="text-secondary text-decoration-none hover-text-primary">
-                            <i class="bi bi-chevron-right small me-1"></i> Privacy
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Categories -->
-            <div class="col-lg-3 col-md-6">
-                <h5 class="fw-bold mb-3">Popular Categories</h5>
-                <div class="d-flex flex-wrap gap-2">
-                    @php
-                        $categories = \App\Models\Category::latest()->take(5)->get();
-                    @endphp
-                    @foreach($categories as $category)
-                        <a href="{{ route('blog.category', $category->slug) }}" 
-                           class="badge px-3 py-2 text-decoration-none" 
-                           style="background-color: {{ $category->color }}; color: {{ $category->name === 'JavaScript' ? '#000' : '#fff' }};">
-                            {{ $category->name }}
-                        </a>
-                    @endforeach
+
+            <div class="col-lg-4 ps-lg-5">
+                <div class="widget">
+                    <h3 class="mb-4">Links</h3>
+                    <ul class="list-unstyled float-start links">
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                        <li><a href="{{ route('about') }}">About</a></li>
+                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                    </ul>
                 </div>
             </div>
-            
-            <!-- Social Links -->
-            <div class="col-lg-3 col-md-6">
-                <h5 class="fw-bold mb-3">Connect</h5>
-                <div class="d-flex gap-3">
-                    <a href="#" class="text-secondary fs-4 hover-text-primary">
-                        <i class="bi bi-github"></i>
-                    </a>
-                    <a href="#" class="text-secondary fs-4 hover-text-primary">
-                        <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a href="#" class="text-secondary fs-4 hover-text-primary">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a href="#" class="text-secondary fs-4 hover-text-primary">
-                        <i class="bi bi-stack-overflow"></i>
-                    </a>
-                    <a href="#" class="text-secondary fs-4 hover-text-primary">
-                        <i class="bi bi-rss-fill"></i>
-                    </a>
+
+            <div class="col-lg-4">
+                <div class="widget">
+                    <h3 class="mb-4">Recent Posts</h3>
+                    <div class="post-entry-footer">
+                        <ul>
+                            @forelse ($footerPosts as $footerPost)
+                                <li>
+                                    <a href="{{ $footerPost->url }}">
+                                        <img src="{{ $footerPost->imageUrl('square') }}" alt="" class="me-4 rounded">
+                                        <div class="text">
+                                            <h4>{{ $footerPost->title }}</h4>
+                                            <div class="post-meta">
+                                                <span class="mr-2">{{ $footerPost->published_at?->format('F j, Y') }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            @empty
+                                <li>No posts yet.</li>
+                            @endforelse
+                        </ul>
+                    </div>
                 </div>
-                
-                <p class="text-secondary small mt-4">
-                    <i class="bi bi-c-circle me-1"></i>
-                    {{ date('Y') }} Dev Blog. All rights reserved.
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                {{--
+                    Required by the Blogy license (https://untree.co/license/):
+                    do not remove the Untree.co credit link unless a license to remove it is bought.
+                --}}
+                <p>
+                    Copyright &copy; {{ date('Y') }} {{ config('app.name', 'Dev Blog') }}. All Rights Reserved.
+                    &mdash; Designed with love by <a href="https://untree.co">Untree.co</a>
+                    Distributed by <a href="https://themewagon.com">ThemeWagon</a>
                 </p>
             </div>
         </div>
     </div>
 </footer>
-
-<style>
-    .hover-text-primary:hover {
-        color: #6366f1 !important;
-        transition: color 0.3s ease;
-    }
-    
-    /* Light mode styles */
-    body.light-mode .bg-black {
-        background-color: #f8f9fa !important;
-    }
-    
-    body.light-mode .text-secondary {
-        color: #6c757d !important;
-    }
-    
-    body.light-mode .border-secondary {
-        border-color: #dee2e6 !important;
-    }
-</style>

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Support\SiteData;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -25,8 +27,23 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureViewComposers();
 
         Paginator::useBootstrapFive();
+    }
+
+    /**
+     * Data for the shared layout partials (Blogy theme header, footer and blog sidebar).
+     */
+    protected function configureViewComposers(): void
+    {
+        View::composer('partials.header', fn ($view) => $view->with([
+            'navCategories' => SiteData::navCategories(),
+        ]));
+
+        View::composer('partials.footer', fn ($view) => $view->with([
+            'footerPosts' => SiteData::recentPosts(),
+        ]));
     }
 
     /**

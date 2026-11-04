@@ -5,7 +5,8 @@ use App\Models\Post;
 use App\Models\Tag;
 
 /*
- * The "other" post is the oldest one, and there are 3 newer posts, so it can't
+ * The "other" post is the oldest one (created and published a year ago; the factory publishes
+ * within the last 6 months), and there are 3 newer posts, so it can't
  * show up in a "recent posts" sidebar or footer block (the Blogy layout has both).
  * That keeps the assertDontSee checks about the listing only.
  */
@@ -15,7 +16,8 @@ test('a category page lists only its published posts', function () {
 
     $other = Post::factory()->published()->create([
         'title' => 'Zebracorn Other Category Post',
-        'created_at' => now()->subDays(10),
+        'created_at' => now()->subYear(),
+        'published_at' => now()->subYear(),
     ]);
     $draft = Post::factory()->unpublished()->create([
         'title' => 'Zebracorn Draft In Category',
@@ -40,7 +42,8 @@ test('a tag page lists only its published posts', function () {
 
     $other = Post::factory()->published()->create([
         'title' => 'Zebracorn Untagged Post',
-        'created_at' => now()->subDays(10),
+        'created_at' => now()->subYear(),
+        'published_at' => now()->subYear(),
     ]);
     $draft = Post::factory()->unpublished()->create(['title' => 'Zebracorn Tagged Draft']);
     $draft->tags()->attach($tag);

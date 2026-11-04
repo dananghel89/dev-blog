@@ -203,7 +203,7 @@ Add any new findings here (ID, location, problem, decision). Fix them only if th
 
 | ID | Location | Problem | Decision |
 |---|---|---|---|
-| N01 | `BlogController`, `HomeController`, `Category`/`Tag` post lists (`->latest()`) | Found while writing the theme plan's Phase 1 tests: lists are ordered by `created_at`, not `published_at`. A post written early and scheduled (or back-dated) shows up in the wrong position | Fix with R06 in Phase D: order by `published_at` (`->latest('published_at')`), wherever the code lives by then (the Livewire `blog.post-list` component after the theme plan). Update `BlogIndexTest` to set `published_at` instead of `created_at` |
+| N01 | `BlogController`, `HomeController`, `Category`/`Tag` post lists (`->latest()`) | Found while writing the theme plan's Phase 1 tests: lists are ordered by `created_at`, not `published_at`. A post written early and scheduled (or back-dated) shows up in the wrong position | **Mostly done by the theme plan:** the `blog.post-list` and `blog.search` components, the home page and `SiteData` order by `published_at`. Left for Phase D: the related posts in `BlogController::show` (still `->latest()`) |
 
 ## 6. Backlog (unfinished features – not part of this plan)
 

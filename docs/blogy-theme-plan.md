@@ -1,6 +1,6 @@
 # Plan: switch the public design to the Blogy theme (Vite + Livewire)
 
-Status: **Draft – not started**
+Status: **Done** – phases 0–8 completed 2026-11-04 (commits from `e4c013f` to the Phase 5–8 commits). The `pre-blogy` tag can be deleted after your final review
 Created: 2026-11-04
 Priority: **1, runs first.** Then [project-review-fix-plan.md](project-review-fix-plan.md), [branding-assets-plan.md](branding-assets-plan.md), [github-migration-plan.md](github-migration-plan.md), [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md), [finish-project-plan.md](finish-project-plan.md).
 
@@ -247,3 +247,7 @@ Order: layout pieces (Phase 3) → home → post page → about → contact (sta
 | B07 | List items, cards, thumbnails | The theme assumes pre-cropped demo photos. Other image sizes were squeezed, and list items overflowed on phones | Phase 4: `img-cover` classes (`object-fit` + `aspect-ratio`), fixed 140px list thumbnails, items stack under `sm`, and the logo column is `col-5 col-lg-2` with `text-nowrap` ("Dev Blog" wrapped in the theme's `col-2`) |
 | B08 | Sidebar search form | The theme positions the search icon absolutely but never makes the form `position: relative`, so the icon was invisible or misplaced | Phase 4: `.search-form-wrap .sidebar-search-form { position: relative }` |
 | B09 | Visual checks | Pages were checked with headless Chrome screenshots (desktop 1280px, phone 540px). Headless Chrome won't lay out narrower than about 500px, so a 390px capture is cropped, not the real phone layout | Use 540px for phone checks, or a real device / DevTools device mode |
+| B10 | `livewire/blog/search` | Escaping `%`/`_` with backslashes works on MySQL (default escape `\`) but not on SQLite, which the tests use (no default escape) | Phase 6: `LIKE ? ESCAPE '!'` with `!` as the escape character, the same on both databases (test: `search treats % and _ literally`) |
+| B11 | Contact form | The plan kept `ContactController::send` until Phase 6 | Phase 6: `POST /contact` and `send()` removed; the form is the `contact-form` component; `ContactFormTest` uses `Livewire::test()` |
+| B12 | Browser check | The Livewire components were also checked in real headless Chrome over the DevTools protocol (typing in search, paging, submitting the contact form): all work, with no JS errors. Local WAMP responses take 1.5–5 s | Information only |
+| B13 | Phase 7, step 4 | The plan said to remove unused theme SCSS blocks | Not done on purpose: the theme SCSS stays complete, so pages can follow the theme 1:1 later (decided 2026-11-04) |

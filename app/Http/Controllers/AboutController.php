@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class AboutController extends \App\Http\Controllers\Controller
+class AboutController extends Controller
 {
     public function index()
     {
@@ -20,6 +20,11 @@ class AboutController extends \App\Http\Controllers\Controller
             'countries_reached' => 30,
         ];
 
-        return view('pages.about', compact('techStack', 'stats'));
+        // Your photo when public/images/avatar.jpg exists, the neutral placeholder otherwise.
+        $avatar = is_file(public_path('images/avatar.jpg'))
+            ? asset('images/avatar.jpg')
+            : asset('images/placeholders/avatar.svg');
+
+        return view('pages.about', compact('techStack', 'stats', 'avatar'));
     }
 }

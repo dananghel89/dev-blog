@@ -20,20 +20,15 @@ export function refreshAnimations() {
 }
 
 // Fades out the theme's preloader (#overlayer + .loader), if the layout has one.
+// A CSS transition + timer instead of the theme's requestAnimationFrame loop, which stalls in background tabs.
 export function hidePreloader() {
     const elements = [document.querySelector('.loader'), document.getElementById('overlayer')].filter(Boolean);
 
-    const fadeOut = (el) => {
-        el.style.opacity = 1;
-        (function fade() {
-            el.style.opacity -= 0.1;
-            if (el.style.opacity < 0) {
-                el.style.display = 'none';
-            } else {
-                requestAnimationFrame(fade);
-            }
-        })();
-    };
-
-    setTimeout(() => elements.forEach(fadeOut), 200);
+    setTimeout(() => {
+        elements.forEach((el) => {
+            el.style.transition = 'opacity .3s ease';
+            el.style.opacity = '0';
+        });
+        setTimeout(() => elements.forEach((el) => (el.style.display = 'none')), 300);
+    }, 200);
 }

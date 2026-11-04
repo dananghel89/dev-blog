@@ -28,3 +28,12 @@ test('every public page shows the Untree.co credit in the footer', function (str
     'about' => ['about', []],
     'contact' => ['contact', []],
 ]);
+
+test('the 404 page uses the theme and keeps the Untree.co credit', function () {
+    $html = $this->get('/no-such-page')->assertNotFound()->getContent();
+
+    expect($html)
+        ->toContain('Page not found')
+        ->toContain('<footer class="site-footer">')
+        ->toContain('<a href="https://untree.co">Untree.co</a>');
+});

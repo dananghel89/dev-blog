@@ -2,7 +2,7 @@
  * Template Name: Blogy
  * Template Author: Untree.co (https://untree.co/)
  * Template License: https://creativecommons.org/licenses/by/3.0/
- * Modified for Dev Blog: integrated into this application.
+ * Modified for Dev Blog: integrated into this application; dropdown arrows use Bootstrap Icons instead of IcoMoon.
  */
 // MENU
 .position-relative {
@@ -125,12 +125,12 @@
 					padding-right: 20px;						
 					&:before {
 						position: absolute;
-						content: "\e313";
+						content: "\f282"; // bi-chevron-down (was IcoMoon e313)
 						font-size: 14px;
 						top: 50%;
 						right: 0;
 						transform: translateY(-50%);
-						font-family: 'icomoon';
+						font-family: 'bootstrap-icons';
 					}
 				}
 				.dropdown {
@@ -202,7 +202,7 @@
 						&.has-children {
 							> a {
 								&:before {
-									content: "\e315";
+									content: "\f285"; // bi-chevron-right (was IcoMoon e315)
 									right: 20px;
 								}
 							}
@@ -392,8 +392,8 @@
 			&:before {
 				font-size: 14px;
 				z-index: 20;
-				font-family: "icomoon";
-				content: "\e313";
+				font-family: "bootstrap-icons";
+				content: "\f282"; // bi-chevron-down (was IcoMoon e313)
 				position: absolute;
 				top: 50%;
 				left: 50%;

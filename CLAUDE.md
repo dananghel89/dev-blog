@@ -46,6 +46,8 @@ Paginating components return `'vendor.pagination.blogy-livewire'` from `paginati
 
 **Seed data.** `CategorySeeder` creates the 8 categories from `CategoryFactory::COLORS` with clean slugs (`named()` state); `PostSeeder` creates 40 posts with unique titles, 5 per category, without images (views show local placeholders). The default `CategoryFactory` keeps a random slug suffix on purpose, so tests can create any number of categories. Never pass a nullable value to an inline `@section('x', $value)`: Blade then opens a section that is never closed.
 
+**Site identity.** Name, tagline, author, contact email and social URLs come from `config/project.php`, backed by `.env` (`APP_NAME`, `BLOG_TAGLINE`, `BLOG_AUTHOR`, `CONTACT_EMAIL`, `SOCIAL_*`). The repo holds only neutral defaults; real values go only in the local `.env`. Views read `config('project.*')`, never hard-coded names. `partials/social-links.blade.php` renders only the networks with a URL (footer, About, Contact). `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png` and `public/images/default-og.png` (1200×630, the `og:image`/`twitter:image` fallback) are the site's own icon and were generated once with PHP GD outside the repo; the source icon is not committed. About shows `public/images/avatar.jpg` when it exists, else the placeholder avatar.
+
 **Production defaults** (`AppServiceProvider`): `CarbonImmutable` dates, destructive DB commands blocked in production, and strict password rules in production only.
 
 ## Planned work
@@ -53,7 +55,7 @@ Paginating components return `'vendor.pagination.blogy-livewire'` from `paginati
 Planned work lives in `docs/`, in this order:
 1. `blogy-theme-plan.md` (priority 1, phases 0–8 done): the Blogy theme, Vite + Sass, the Livewire components.
 2. `project-review-fix-plan.md` (done): bug fixes, Pest suite, removal of Fortify/Flux.
-3. `branding-assets-plan.md`: identity in `config/project.php`, own favicon, default OG image.
+3. `branding-assets-plan.md` (done): identity in `config/project.php`, own favicon, default OG image.
 4. `github-migration-plan.md`: Bitbucket → public GitHub, history rewritten to the noreply identity and scrubbed of the old brand.
 5. `laravel-13-upgrade-plan.md`: Laravel 13, Livewire 4.4, Vite 8, Pest 5.
 6. `finish-project-plan.md`: Filament 5 admin, Markdown posts, double-opt-in newsletter, moderated comments, settings, feeds.
@@ -64,5 +66,4 @@ Each plan works directly on `master`, one commit per phase, and only after the u
 
 - No login or admin: Filament 5 in the finish plan.
 - No privacy, terms, sitemap, RSS or newsletter: their routes were removed (real 404s) and are rebuilt in the finish plan.
-- No default OG image (`public/images/default-og.png`), `"Your Name"` and `href="#"` social links: the branding plan. (Its favicon phase is done: `public/favicon.ico`, `favicon.png`, `apple-touch-icon.png` are the site's own icon.)
 - Post content is seeded HTML printed with `{!! !!}`: switches to Markdown with raw HTML stripped in the finish plan.

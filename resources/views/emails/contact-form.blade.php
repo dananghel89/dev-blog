@@ -217,7 +217,7 @@
     <div class="email-container">
         <!-- Header -->
         <div class="email-header">
-            <h1 class="logo">{{ config('app.name') }}</h1>
+            <h1 class="logo">{{ config('app.name') }}<span>.</span></h1>
             <p class="header-title">Full Stack Development Blog</p>
             <span class="date-badge">
                 📅 {{ now()->format('F j, Y') }} at {{ now()->format('g:i A') }}

@@ -5,7 +5,7 @@
             <div class="site-navigation">
                 <div class="row g-0 align-items-center">
                     <div class="col-5 col-lg-2">
-                        <a href="{{ route('home') }}" class="logo m-0 float-start text-nowrap">Dev Blog</a>
+                        <a href="{{ route('home') }}" class="logo m-0 float-start text-nowrap">Dev Blog<span class="text-primary">.</span></a>
                     </div>
 
                     <div class="col-5 col-lg-8 text-center">

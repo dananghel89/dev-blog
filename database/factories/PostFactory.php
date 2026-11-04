@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,7 +23,7 @@ class PostFactory extends Factory
             'When HTML5 Forms Attack: A Validation Nightmare',
             'The Day Composer Dependencies Broke Everything',
             'Fixing CORS Issues in PHP APIs',
-            'CSS Flexbox vs Grid: Real World Comparison'
+            'CSS Flexbox vs Grid: Real World Comparison',
         ]);
 
         $uniqueNumber = fake()->unique()->numberBetween(1, 9999);
@@ -33,7 +33,7 @@ class PostFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . $uniqueNumber,
+            'slug' => Str::slug($title).'-'.$uniqueNumber,
             'content' => $content,
             'excerpt' => $excerpt,
             // No external placeholder service: views fall back to the local SVGs (Post::imageUrl()).
@@ -49,15 +49,15 @@ class PostFactory extends Factory
         $sections = [];
 
         // Problem section
-        $sections[] = "<h2>The Problem</h2>";
-        $sections[] = "<p>" . fake()->paragraphs(3, true) . "</p>";
-        
+        $sections[] = '<h2>The Problem</h2>';
+        $sections[] = '<p>'.fake()->paragraphs(3, true).'</p>';
+
         // Debugging section
-        $sections[] = "<h2>Initial Debugging</h2>";
-        $sections[] = "<p>" . fake()->paragraphs(2, true) . "</p>";
-        
+        $sections[] = '<h2>Initial Debugging</h2>';
+        $sections[] = '<p>'.fake()->paragraphs(2, true).'</p>';
+
         // Code example
-        $sections[] = "<pre><code class=\"language-php\">" . htmlspecialchars('<?php
+        $sections[] = '<pre><code class="language-php">'.htmlspecialchars('<?php
 
 // This is where the bug was hiding
 public function processQueue()
@@ -78,19 +78,19 @@ public function processQueueFixed()
             $this->process($item);
         }
     });
-}') . "</code></pre>";
-        
+}').'</code></pre>';
+
         // Solution section
-        $sections[] = "<h2>The Solution</h2>";
-        $sections[] = "<p>" . fake()->paragraphs(2, true) . "</p>";
-        
+        $sections[] = '<h2>The Solution</h2>';
+        $sections[] = '<p>'.fake()->paragraphs(2, true).'</p>';
+
         // Lessons learned
-        $sections[] = "<h2>Lessons Learned</h2>";
-        $sections[] = "<ul>";
+        $sections[] = '<h2>Lessons Learned</h2>';
+        $sections[] = '<ul>';
         for ($i = 0; $i < 3; $i++) {
-            $sections[] = "<li>" . fake()->sentence() . "</li>";
+            $sections[] = '<li>'.fake()->sentence().'</li>';
         }
-        $sections[] = "</ul>";
+        $sections[] = '</ul>';
 
         return implode("\n\n", $sections);
     }

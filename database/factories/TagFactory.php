@@ -13,14 +13,14 @@ class TagFactory extends Factory
     public function definition(): array
     {
         $tags = [
-            'debugging', 'tutorial', 'performance', 'security', 
+            'debugging', 'tutorial', 'performance', 'security',
             'optimization', 'beginner', 'advanced', 'tips',
             'laravel', 'eloquent', 'blade', 'api', 'database',
-            'frontend', 'backend', 'responsive', 'animation'
+            'frontend', 'backend', 'responsive', 'animation',
         ];
-        
+
         $name = fake()->unique()->randomElement($tags);
-        
+
         return [
             'name' => $name,
             'slug' => Str::slug($name),

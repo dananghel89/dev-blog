@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
-            
+
             // Indexes for performance
             $table->index(['is_published', 'published_at']);
             $table->index('category_id');

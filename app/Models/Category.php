@@ -17,7 +17,7 @@ class Category extends Model
         'name',
         'slug',
         'description',
-        'color'
+        'color',
     ];
 
     protected function slugSource(): string
@@ -33,7 +33,6 @@ class Category extends Model
         return $this->hasMany(Post::class);
     }
 
-
     /**
      * Get the category URL
      */
@@ -41,5 +40,4 @@ class Category extends Model
     {
         return route('blog.category', $this->slug);
     }
-
 }

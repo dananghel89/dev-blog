@@ -15,7 +15,7 @@ class Tag extends Model
      */
     protected $fillable = [
         'name',
-        'slug'
+        'slug',
     ];
 
     protected function slugSource(): string
@@ -31,7 +31,6 @@ class Tag extends Model
         return $this->belongsToMany(Post::class);
     }
 
-
     /**
      * Get the tag URL
      */
@@ -39,5 +38,4 @@ class Tag extends Model
     {
         return route('blog.tag', $this->slug);
     }
-
 }

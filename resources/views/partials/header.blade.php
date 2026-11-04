@@ -5,7 +5,7 @@
             <div class="site-navigation">
                 <div class="row g-0 align-items-center">
                     <div class="col-5 col-lg-2">
-                        <a href="{{ route('home') }}" class="logo m-0 float-start text-nowrap">Dev Blog<span class="text-primary">.</span></a>
+                        <a href="{{ route('home') }}" class="logo m-0 float-start text-nowrap">{{ config('project.name') }}<span class="text-primary">.</span></a>
                     </div>
 
                     <div class="col-5 col-lg-8 text-center">
@@ -41,9 +41,9 @@
                     </div>
 
                     <div class="col-2 text-end">
-                        <a href="#" class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" aria-label="Open menu">
+                        <button type="button" class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" aria-label="Open menu">
                             <span></span>
-                        </a>
+                        </button>
                         <form action="{{ route('blog.search') }}" method="GET" class="search-form d-none d-lg-inline-block" role="search">
                             <input type="search" name="q" class="form-control" placeholder="Search..." aria-label="Search posts" minlength="2" required>
                             <span class="bi-search" aria-hidden="true"></span>

@@ -136,3 +136,33 @@
 		padding-right: 45px;
 	}
 }
+
+// Social links outside the footer (About, Contact): the footer's square icons, inverted for light backgrounds.
+.social-inline {
+	margin: 0;
+	li {
+		display: inline-block;
+		margin-right: .25rem;
+		a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			border-radius: 4px;
+			background: $primary;
+			color: $white;
+			&:hover {
+				background: $secondary;
+				color: $white;
+			}
+		}
+	}
+}
+
+// The mobile menu toggle is a <button> (not a dead href="#" link): drop the browser's button styles.
+button.burger {
+	border: 0;
+	padding: 0;
+	background: transparent;
+}

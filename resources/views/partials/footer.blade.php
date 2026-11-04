@@ -5,17 +5,9 @@
             <div class="col-lg-4">
                 <div class="widget">
                     <h3 class="mb-4">About</h3>
-                    <p>A personal blog documenting daily development challenges and solutions in PHP, MySQL, HTML, CSS, and JavaScript. Real problems, real solutions.</p>
+                    <p>{{ config('project.name') }}: {{ config('project.tagline') }}. Written by {{ config('project.author') }}, about PHP, MySQL, HTML, CSS and JavaScript.</p>
                 </div>
-                <div class="widget">
-                    <h3>Social</h3>
-                    <ul class="list-unstyled social">
-                        <li><a href="#" aria-label="GitHub"><span class="bi bi-github"></span></a></li>
-                        <li><a href="#" aria-label="X (Twitter)"><span class="bi bi-twitter-x"></span></a></li>
-                        <li><a href="#" aria-label="LinkedIn"><span class="bi bi-linkedin"></span></a></li>
-                        <li><a href="#" aria-label="Stack Overflow"><span class="bi bi-stack-overflow"></span></a></li>
-                    </ul>
-                </div>
+                @include('partials.social-links', ['wrapper' => 'widget', 'heading' => 'Social'])
             </div>
 
             <div class="col-lg-4 ps-lg-5">
@@ -63,7 +55,7 @@
                     do not remove the Untree.co credit link unless a license to remove it is bought.
                 --}}
                 <p>
-                    Copyright &copy; {{ date('Y') }} {{ config('app.name', 'Dev Blog') }}. All Rights Reserved.
+                    Copyright &copy; {{ date('Y') }} {{ config('project.name') }}. All Rights Reserved.
                     &mdash; Designed with love by <a href="https://untree.co">Untree.co</a>
                     Distributed by <a href="https://themewagon.com">ThemeWagon</a>
                 </p>

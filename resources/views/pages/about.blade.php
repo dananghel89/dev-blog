@@ -11,7 +11,7 @@
                 <div class="col-md-8">
                     <div class="post-entry text-center">
                         <h1 class="mb-4">About</h1>
-                        <p class="text-white-50 mb-0">Full-stack developer, solving real-world problems through code</p>
+                        <p class="text-white-50 mb-0">{{ config('project.tagline') }}</p>
                     </div>
                 </div>
             </div>
@@ -23,13 +23,14 @@
             <div class="half-content d-lg-flex align-items-stretch">
                 <div class="img" style="background-image: url('{{ asset('images/placeholders/avatar.svg') }}')" data-aos="fade-in" data-aos-delay="100" role="img" aria-label="Profile picture"></div>
                 <div class="text">
-                    <h2 class="heading text-primary mb-3">Hi, I'm Your Name</h2>
+                    <h2 class="heading text-primary mb-3">Hi, I'm {{ config('project.author') }}</h2>
                     <p class="mb-4">
                         I'm a full-stack developer with {{ $stats['years_experience'] }}+ years of experience building web
                         applications. I specialize in PHP, MySQL, and modern JavaScript, and I love sharing the challenges
                         I encounter in my daily work.
                     </p>
                     <p><a href="{{ route('blog.index') }}" class="btn btn-outline-primary py-2">Read the blog</a></p>
+                    @include('partials.social-links', ['wrapper' => 'mt-4', 'class' => 'list-unstyled social social-inline'])
                 </div>
             </div>
             <div class="half-content d-lg-flex align-items-stretch">

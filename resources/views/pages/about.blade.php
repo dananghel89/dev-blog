@@ -21,7 +21,7 @@
     <div class="section sec-halfs py-0">
         <div class="container">
             <div class="half-content d-lg-flex align-items-stretch">
-                <div class="img" style="background-image: url('{{ asset('images/placeholders/avatar.svg') }}')" data-aos="fade-in" data-aos-delay="100" role="img" aria-label="Profile picture"></div>
+                <div class="img" style="background-image: url('{{ $avatar }}')" data-aos="fade-in" data-aos-delay="100" role="img" aria-label="Profile picture"></div>
                 <div class="text">
                     <h2 class="heading text-primary mb-3">Hi, I'm {{ config('project.author') }}</h2>
                     <p class="mb-4">

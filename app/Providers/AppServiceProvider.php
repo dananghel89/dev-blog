@@ -44,6 +44,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('partials.footer', fn ($view) => $view->with([
             'footerPosts' => SiteData::recentPosts(),
         ]));
+
+        View::composer('blog.partials.sidebar', fn ($view) => $view->with([
+            'sidebarPosts' => SiteData::recentPosts(),
+            'sidebarCategories' => SiteData::sidebarCategories(),
+            'sidebarTags' => SiteData::sidebarTags(),
+        ]));
     }
 
     /**

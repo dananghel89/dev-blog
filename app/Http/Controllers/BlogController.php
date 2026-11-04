@@ -16,14 +16,8 @@ class BlogController extends \App\Http\Controllers\Controller
             ->latest()
             ->paginate(10);
             
-        $popularTags = Tag::withCount('posts')
-            ->orderBy('posts_count', 'desc')
-            ->take(10)
-            ->get();
-            
-        $categories = Category::withCount('posts')->get();
-        
-        return view('blog.index', compact('posts', 'popularTags', 'categories'));
+        // Sidebar data (categories, tags, recent posts) comes from the view composer.
+        return view('blog.index', compact('posts'));
     }
     
     public function show(Post $post)
@@ -35,9 +29,12 @@ class BlogController extends \App\Http\Controllers\Controller
         $relatedPosts = Post::published()
             ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
+            ->with('category')
             ->latest()
-            ->take(3)
+            ->take(4)
             ->get();
+
+        $post->load(['category', 'tags']);
             
         return view('blog.show', compact('post', 'relatedPosts'));
     }
@@ -46,6 +43,7 @@ class BlogController extends \App\Http\Controllers\Controller
     {
         $posts = $category->posts()
             ->published()
+            ->with('category')
             ->latest()
             ->paginate(10);
             
@@ -56,6 +54,7 @@ class BlogController extends \App\Http\Controllers\Controller
     {
         $posts = $tag->posts()
             ->published()
+            ->with('category')
             ->latest()
             ->paginate(10);
             
@@ -67,6 +66,7 @@ class BlogController extends \App\Http\Controllers\Controller
         $query = $request->get('q');
         
         $posts = Post::published()
+            ->with('category')
             ->where(function($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('content', 'like', "%{$query}%")

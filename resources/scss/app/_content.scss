@@ -1,2 +1,138 @@
 // Project additions on top of the Blogy theme.
-// Post body typography is filled in when the post page is converted (Blogy theme plan, Phase 4).
+
+// Post body typography (blog/show.blade.php). The theme only styles paragraphs.
+.post-content-body {
+	font-size: 1.05rem;
+	line-height: 1.8;
+	color: #4d5a62;
+
+	h2 {
+		font-size: 1.6rem;
+		font-weight: 700;
+		color: $primary;
+		margin-top: 2.5rem;
+		margin-bottom: 1.25rem;
+	}
+
+	h3 {
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: $primary;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	p,
+	ul,
+	ol {
+		margin-bottom: 1.5rem;
+	}
+
+	ul,
+	ol {
+		padding-left: 1.5rem;
+
+		li {
+			margin-bottom: .5rem;
+		}
+	}
+
+	a {
+		text-decoration: underline;
+	}
+
+	pre {
+		background: #f4f6f8;
+		border: 1px solid #e3e7eb;
+		border-radius: 6px;
+		padding: 1.25rem;
+		margin: 1.5rem 0;
+		overflow-x: auto;
+		font-size: .9rem;
+		line-height: 1.6;
+	}
+
+	code {
+		font-family: SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+		color: $secondary;
+	}
+
+	pre code {
+		color: #2b3a42;
+	}
+
+	blockquote {
+		border-left: 4px solid $primary;
+		padding-left: 1.25rem;
+		margin: 1.5rem 0;
+		font-style: italic;
+	}
+
+	table {
+		width: 100%;
+		margin-bottom: 1.5rem;
+		border-collapse: collapse;
+
+		th,
+		td {
+			border: 1px solid #e3e7eb;
+			padding: .5rem .75rem;
+		}
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+		border-radius: 6px;
+	}
+}
+
+// The site-cover falls back to the primary colour when a post has no featured image.
+.site-cover.bg-primary {
+	background-color: $primary;
+}
+
+// Post images keep their slot's ratio whatever the uploaded size (the theme assumes pre-cropped demo photos).
+.img-cover {
+	width: 100%;
+	object-fit: cover;
+}
+.img-cover-horizontal {
+	aspect-ratio: 3 / 2;
+}
+.img-cover-square {
+	aspect-ratio: 1 / 1;
+}
+.post-entry-sidebar img,
+.post-entry-footer img {
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+// List items (blog, category, tag, search): stack the image above the text on phones,
+// and let the text column shrink instead of overflowing.
+.blog-entry-search-item {
+	> div {
+		min-width: 0;
+	}
+	.img-link {
+		flex: 0 0 140px;
+	}
+	@include media-breakpoint-down(sm) {
+		flex-direction: column;
+		.img-link {
+			flex-basis: auto;
+			width: 100%;
+			margin-right: 0 !important;
+			margin-bottom: 1rem;
+		}
+	}
+}
+
+// The theme positions the search icon absolutely but never makes the form the positioning context.
+.search-form-wrap .sidebar-search-form {
+	position: relative;
+	.form-control {
+		padding-right: 45px;
+	}
+}

@@ -4,11 +4,11 @@
         <div class="menu-bg-wrap">
             <div class="site-navigation">
                 <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                        <a href="{{ route('home') }}" class="logo m-0 float-start">Dev Blog</a>
+                    <div class="col-5 col-lg-2">
+                        <a href="{{ route('home') }}" class="logo m-0 float-start text-nowrap">Dev Blog</a>
                     </div>
 
-                    <div class="col-8 text-center">
+                    <div class="col-5 col-lg-8 text-center">
                         <form action="{{ route('blog.search') }}" method="GET" class="search-form d-inline-block d-lg-none" role="search">
                             <input type="search" name="q" class="form-control" placeholder="Search..." aria-label="Search posts" minlength="2" required>
                             <span class="bi-search" aria-hidden="true"></span>

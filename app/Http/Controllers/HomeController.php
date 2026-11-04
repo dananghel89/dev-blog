@@ -2,24 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
 
-class HomeController extends \App\Http\Controllers\Controller
+class HomeController extends Controller
 {
     public function index()
     {
-        $featuredPosts = Post::published()
-            ->latest()
-            ->take(3)
+        // Newest published posts: 5 for the featured grid, 4 for the small grid, 6 for "More posts".
+        $latest = Post::published()
+            ->with('category')
+            ->latest('published_at')
+            ->take(15)
             ->get();
-            
-        $categories = [
-            'PHP' => Post::whereHas('category', fn($q) => $q->where('name', 'PHP'))->count(),
-            'MySQL' => Post::whereHas('category', fn($q) => $q->where('name', 'MySQL'))->count(),
-            'HTML/CSS' => Post::whereHas('category', fn($q) => $q->whereIn('name', ['HTML', 'CSS']))->count(),
-            'JavaScript' => Post::whereHas('category', fn($q) => $q->where('name', 'JavaScript'))->count(),
-        ];
-        
-        return view('pages.home', compact('featuredPosts', 'categories'));
+
+        $featuredPosts = $latest->take(5)->values();
+        $gridPosts = $latest->slice(5, 4)->values();
+        $morePosts = $latest->slice(9, 6)->values();
+
+        // The two categories with the most published posts, each with its 5 newest posts.
+        $categoryBlocks = Category::query()
+            ->whereHas('posts', fn (Builder $query) => $query->published())
+            ->withCount(['posts' => fn (Builder $query) => $query->published()])
+            ->orderByDesc('posts_count')
+            ->orderBy('name')
+            ->take(2)
+            ->get()
+            ->each(fn (Category $category) => $category->setRelation(
+                'posts',
+                $category->posts()->published()->latest('published_at')->take(5)->get()
+            ));
+
+        return view('pages.home', compact('featuredPosts', 'gridPosts', 'morePosts', 'categoryBlocks'));
     }
 }

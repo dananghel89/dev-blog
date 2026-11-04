@@ -1,6 +1,6 @@
 # Project review and fix plan
 
-Status: **Draft – not started**
+Status: **Done** – 2026-11-04. Phase A `0d81049`, B `0446646`, C `21a6c77`, D `a5629ce`, E `67b675a`, F `f92d0fd`, G verified (no commit), H wrap-up commit. The branding plan can start
 Created: 2026-11-04
 Runs **second**, after [blogy-theme-plan.md](blogy-theme-plan.md) (priority 1, added 2026-11-04). Then [branding-assets-plan.md](branding-assets-plan.md), then [github-migration-plan.md](github-migration-plan.md), then [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md), then [finish-project-plan.md](finish-project-plan.md).
 
@@ -203,7 +203,11 @@ Add any new findings here (ID, location, problem, decision). Fix them only if th
 
 | ID | Location | Problem | Decision |
 |---|---|---|---|
-| N01 | `BlogController`, `HomeController`, `Category`/`Tag` post lists (`->latest()`) | Found while writing the theme plan's Phase 1 tests: lists are ordered by `created_at`, not `published_at`. A post written early and scheduled (or back-dated) shows up in the wrong position | **Mostly done by the theme plan:** the `blog.post-list` and `blog.search` components, the home page and `SiteData` order by `published_at`. Left for Phase D: the related posts in `BlogController::show` (still `->latest()`) |
+| N01 | `BlogController`, `HomeController`, `Category`/`Tag` post lists (`->latest()`) | Found while writing the theme plan's Phase 1 tests: lists are ordered by `created_at`, not `published_at`. A post written early and scheduled (or back-dated) shows up in the wrong position | **Done:** the theme plan's components, the home page and `SiteData` order by `published_at`; Phase D fixed the related posts in `BlogController::show` |
+| N02 | `CategoryFactory` (R04) | The plan said to use `fake()->unique()` on the 8 names without a slug suffix. That breaks tests that create more than 8 categories (e.g. 12 posts, each with its own category) | Kept the random name + unique slug suffix in the default factory; clean categories come from the new `named()` state, which `CategorySeeder` uses |
+| N03 | `composer.json` / `composer.lock` (Phase B) | Renaming the package changes the lock's `content-hash`. `composer update --lock` failed on an unrelated dependency resolution problem | The hash was recomputed with Composer's own algorithm (checked against the committed lock first) and written into the lock; `composer validate` passes and `composer install --dry-run` changes nothing |
+| N04 | R05, R07, R14, R21 | Already fixed or obsolete after the theme plan | R05, R07, R14: tests added and passing without code changes. R21: dropped, because no view uses the category colour any more |
+| N05 | `PublishedRulesTest` (N01) | The first version of the related-posts test passed for the wrong reason: the sidebar shows the same titles in the right order | The test now only looks at the related-posts section; it failed, then passed after the fix |
 
 ## 6. Backlog (unfinished features – not part of this plan)
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Dev Blog**: a personal developer blog (Laravel 12, PHP 8.4, Livewire 4) on top of the Laravel Livewire starter kit. The public site uses the **Blogy** theme by Untree.co. Most of the kit's auth/settings UI has been removed, but its config and tests are still in the repo (see "Starter-kit leftovers" below).
+**Dev Blog**: a personal developer blog (Laravel 12, PHP 8.4, Livewire 4). The public site uses the **Blogy** theme by Untree.co. It started from the Laravel Livewire starter kit, but the kit's auth and settings (Fortify, Flux) were removed: there is **no login or admin yet**. A Filament admin is planned (finish plan); until then, posts come from the seeders.
 
 ## Commands
 
@@ -16,7 +16,7 @@ composer lint             # pint --parallel (auto-fix code style, "laravel" pres
 npm run build             # compile resources/scss/app.scss + resources/js/app.js into public/build (needed for the site)
 npm run dev               # Vite dev server with hot reload
 
-php artisan test tests/Feature/Site                          # the blog's suite (green)
+php artisan test                                             # whole suite (green)
 php artisan test tests/Feature/Site/SearchTest.php           # single file
 php artisan test --filter="search needs at least two"        # single test by name
 
@@ -42,7 +42,9 @@ Paginating components return `'vendor.pagination.blogy-livewire'` from `paginati
 
 **Theme license (important).** Blogy is CC BY 3.0 (https://untree.co/license/). **Never remove the Untree.co credit link in `partials/footer.blade.php`** (`ThemeCreditTest` checks it on every page). Keep the `/*! … Untree.co … */` headers in the theme SCSS/JS files; `vite.config.js` sets `esbuild.legalComments: 'inline'` so they survive the build. Never commit the original template files (demo `*.html`, demo images, IcoMoon/Flaticon fonts, the bundled vendor copies).
 
-**Domain model.** `Post` belongs to `Category` and is many-to-many with `Tag` (through `post_tag`). Posts, categories and tags use route-model binding by `slug`. `Post` and `Category` generate the slug from the title or name in a `creating` hook if it is empty. Visibility always goes through `Post::published()` (`is_published = true` AND `published_at <= now()`). `BlogController::show` also returns 404 for unpublished posts. Never pass a nullable value to an inline `@section('x', $value)`: Blade then opens a section that is never closed.
+**Domain model.** `Post` belongs to `Category` and is many-to-many with `Tag` (through `post_tag`). Posts, categories and tags use route-model binding by `slug`. `Post`, `Category` and `Tag` use `App\Models\Concerns\HasUniqueSlug`: a missing slug is generated from `slugSource()` and made unique (`title`, `title-2`, ...). Visibility always goes through `Post::published()` (`is_published = true` AND `published_at <= now()`), including `BlogController::show` (drafts and scheduled posts → 404). Lists order by `published_at`, and every count is of published posts only.
+
+**Seed data.** `CategorySeeder` creates the 8 categories from `CategoryFactory::COLORS` with clean slugs (`named()` state); `PostSeeder` creates 40 posts with unique titles, 5 per category, without images (views show local placeholders). The default `CategoryFactory` keeps a random slug suffix on purpose, so tests can create any number of categories. Never pass a nullable value to an inline `@section('x', $value)`: Blade then opens a section that is never closed.
 
 **Production defaults** (`AppServiceProvider`): `CarbonImmutable` dates, destructive DB commands blocked in production, and strict password rules in production only.
 
@@ -50,7 +52,7 @@ Paginating components return `'vendor.pagination.blogy-livewire'` from `paginati
 
 Planned work lives in `docs/`, in this order:
 1. `blogy-theme-plan.md` (priority 1, phases 0–8 done): the Blogy theme, Vite + Sass, the Livewire components.
-2. `project-review-fix-plan.md`: bug fixes, Pest suite, removal of Fortify/Flux.
+2. `project-review-fix-plan.md` (done): bug fixes, Pest suite, removal of Fortify/Flux.
 3. `branding-assets-plan.md`: identity in `config/project.php`, own favicon, default OG image.
 4. `github-migration-plan.md`: Bitbucket → public GitHub, history rewritten to the noreply identity and scrubbed of the old brand.
 5. `laravel-13-upgrade-plan.md`: Laravel 13, Livewire 4.4, Vite 8, Pest 5.
@@ -58,10 +60,9 @@ Planned work lives in `docs/`, in this order:
 
 Each plan works directly on `master`, one commit per phase, and only after the user approves. Commit messages are one-line `type: description`.
 
-## Starter-kit leftovers / known gaps
+## Known gaps (planned)
 
-- `routes/settings.php` exists but is **not loaded**. The `pages::auth.*` and `pages::settings.*` views that Fortify and the settings routes point to have been deleted, and there is no `dashboard` route. So most tests in `tests/Feature/Auth`, `tests/Feature/Settings` and `DashboardTest.php` fail; don't treat them as regressions. The review plan removes them.
-- Fortify is still registered (`FortifyServiceProvider`, `config/fortify.php`) with registration enabled.
-- `web.php` references views that don't exist yet: `pages.privacy`, `pages.terms` and `sitemap`. The default OG image `public/images/default-og.png` is missing.
-- `NewsletterController` is a stub that saves nothing.
-- The seeders create duplicate categories (`PostFactory` creates a category per post; review-plan R04).
+- No login or admin: Filament 5 in the finish plan.
+- No privacy, terms, sitemap, RSS or newsletter: their routes were removed (real 404s) and are rebuilt in the finish plan.
+- No default OG image (`public/images/default-og.png`), the Laravel favicon, `"Your Name"` and `href="#"` social links: the branding plan.
+- Post content is seeded HTML printed with `{!! !!}`: switches to Markdown with raw HTML stripped in the finish plan.

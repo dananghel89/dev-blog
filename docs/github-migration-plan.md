@@ -31,6 +31,8 @@ Plan order in `docs/`:
 
 ### 1.1 What the history contains today (checked 2026-11-04)
 
+> Commit hashes in this plan are the **original Bitbucket** ones. The rewrite changed every hash: on GitHub, `4b496c5` is `c49bd88` and `c36158d` is `8cf22a4`. The other plans were updated to the new hashes.
+
 - 2 commits on `master` (`4b496c5` Upload project files to repository, `c36158d` Remove example directory), both authored and committed with your **gmail** address. The review and branding plans add more commits with your Bitbucket address (the local identity while the remote is Bitbucket).
 - No `.env` was ever committed (`git log --all -- .env` → nothing). The local database is MySQL (`dev_blog`, since 2026-11-04) and lives outside the repo; the old `database/database.sqlite` was git-ignored (`*.sqlite*`), so no database was ever committed. There are no API keys or tokens.
 - Your gmail address does **not** appear in any file content, in any commit.

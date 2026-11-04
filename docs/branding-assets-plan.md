@@ -127,17 +127,17 @@ Done in [blogy-theme-plan.md](blogy-theme-plan.md), Phase 3: local SVGs in three
 
 | Phase | Commit | Result |
 |---|---|---|
-| Favicon | `6305f22`, `ec7a1c2` | Own favicon (ICO 16/32/48, PNG 192, touch icon 180); the Laravel files and `favicon.svg` are gone |
-| Identity | `378bc09` | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links; `BrandingTest` |
-| Placeholders | `7428765` | Done in the theme plan; About shows `public/images/avatar.jpg` when it exists |
-| OG image | `a1f6ef3` | `default-og.png`, absolute `og:image` and `twitter:image`, with a working fallback; `OpenGraphTest` |
+| Favicon | `a940c00`, `a83d434` | Own favicon (ICO 16/32/48, PNG 192, touch icon 180); the Laravel files and `favicon.svg` are gone |
+| Identity | `d51e8ef` | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links; `BrandingTest` |
+| Placeholders | `41376f3` | Done in the theme plan; About shows `public/images/avatar.jpg` when it exists |
+| OG image | `5970ea0` | `default-og.png`, absolute `og:image` and `twitter:image`, with a working fallback; `OpenGraphTest` |
 | Credits | the closing commit | Banners checked in the build, README credits and `.env` keys, `"license": "proprietary"`, `CLAUDE.md` |
 
 ### Findings and deviations
 
 | # | Where | Finding | Resolution |
 |---|---|---|---|
-| G01 | Source icon | The `</>` glyph in the source PNG is **transparent**, not white: it only looks white on a white viewer. On a dark browser tab the glyph turned dark, and on the OG image it vanished into the gradient | A white disc is placed under the circle before resampling (a few pixels inside, so the anti-aliased rim stays transparent). The favicons were regenerated (`ec7a1c2`) |
+| G01 | Source icon | The `</>` glyph in the source PNG is **transparent**, not white: it only looks white on a white viewer. On a dark browser tab the glyph turned dark, and on the OG image it vanished into the gradient | A white disc is placed under the circle before resampling (a few pixels inside, so the anti-aliased rim stays transparent). The favicons were regenerated (`a83d434`) |
 | G02 | Header | The mobile menu toggle was an `<a href="#">`, which the "no `href="#"`" rule also covers | It's a `<button type="button">` now, with the browser button styles reset in `app/_content.scss`; `navbar.js` is unchanged |
 | G03 | Social links | The footer had four networks; the plan listed three | `SOCIAL_STACKOVERFLOW` added, so all four can be set. With none set, the footer's *Social* block is left out entirely. About and Contact use the same partial with `.social-inline` (the footer's white squares are invisible on light backgrounds) |
 | G04 | Post `og:image` | A root-relative `featured_image` (`/images/x.jpg`) was shared as a relative URL, which crawlers ignore | `blog/show` wraps it in `url()`; `OpenGraphTest` covers both forms |

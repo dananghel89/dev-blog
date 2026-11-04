@@ -1,6 +1,6 @@
 # Plan: switch the public design to the Blogy theme (Vite + Livewire)
 
-Status: **Done** – phases 0–8 completed 2026-11-04 (commits from `e4c013f` to the Phase 5–8 commits). The `pre-blogy` tag can be deleted after your final review
+Status: **Done** – phases 0–8 completed 2026-11-04 (commits from `58f1871` to the Phase 5–8 commits). The `pre-blogy` tag can be deleted after your final review
 Created: 2026-11-04
 Priority: **1, runs first.** Then [project-review-fix-plan.md](project-review-fix-plan.md), [branding-assets-plan.md](branding-assets-plan.md), [github-migration-plan.md](github-migration-plan.md), [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md), [finish-project-plan.md](finish-project-plan.md).
 
@@ -78,7 +78,7 @@ The theme's bio box isn't ported.
 
 1. Work directly on `master`; tag the starting point: `git tag pre-blogy` and `git push origin pre-blogy`.
 2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
-3. ~~Commit the uncommitted changes~~: **done 2026-11-04** (`e6c1415`, `4d2e9f7`, `f8aab6b`: InnoDB fix, package-lock name, `.env.example` on MySQL and `dev-blog.test`). Check that `git status` is clean.
+3. ~~Commit the uncommitted changes~~: **done 2026-11-04** (`176a32c`, `dc91d33`, `6a7c6bc`: InnoDB fix, package-lock name, `.env.example` on MySQL and `dev-blog.test`). Check that `git status` is clean.
 4. Take screenshots of the current home, blog, post, about and contact pages for comparison (`../dev-blog-before/`).
 5. `npm install`, then `npm run build` → it works today (Tailwind + Flux CSS), and this is the reference.
 

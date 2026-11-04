@@ -1,6 +1,6 @@
 # Project review and fix plan
 
-Status: **Done** – 2026-11-04. Phase A `0d81049`, B `0446646`, C `21a6c77`, D `a5629ce`, E `67b675a`, F `f92d0fd`, G verified (no commit), H wrap-up commit. The branding plan can start
+Status: **Done** – 2026-11-04. Phase A `5855b52`, B `e948473`, C `da18ce2`, D `4d00ce9`, E `0876c47`, F `0875d8a`, G verified (no commit), H wrap-up commit. The branding plan can start
 Created: 2026-11-04
 Runs **second**, after [blogy-theme-plan.md](blogy-theme-plan.md) (priority 1, added 2026-11-04). Then [branding-assets-plan.md](branding-assets-plan.md), then [github-migration-plan.md](github-migration-plan.md), then [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md), then [finish-project-plan.md](finish-project-plan.md).
 
@@ -97,8 +97,8 @@ Identity and content placeholders ("Your Name", `href="#"` social links, the mis
 ### Phase A – Safety first (no behaviour change)
 
 1. Work directly on `master`: commit and push each phase only after you confirm it (I show the files and message first), with no feature branch. Back up the DB (section 2).
-2. ~~Commit the uncommitted changes~~: **done 2026-11-04**. Committed: `e6c1415 fix: force InnoDB for MySQL tables`, `4d2e9f7 chore: rename package-lock project to dev-blog` and `f8aab6b chore: switch .env.example to MySQL and dev-blog.test`.
-3. **R24** (partly done in `f8aab6b`):
+2. ~~Commit the uncommitted changes~~: **done 2026-11-04**. Committed: `176a32c fix: force InnoDB for MySQL tables`, `dc91d33 chore: rename package-lock project to dev-blog` and `6a7c6bc chore: switch .env.example to MySQL and dev-blog.test`.
+3. **R24** (partly done in `6a7c6bc`):
    - ~~`.env.example` → `DB_CONNECTION=mysql` with the `dev_blog` keys and an empty `DB_PASSWORD`~~: done
    - remove the `database.sqlite` line from `composer.json` `post-create-project-cmd`
    - delete the leftover `database/database.sqlite` (copy it outside the repo first if you want to keep it)

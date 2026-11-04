@@ -18,6 +18,7 @@ test('the contact form validates its fields', function () {
 
 test('a valid contact form submission sends the contact mail', function () {
     Mail::fake();
+    config(['project.contact_email' => 'inbox@example.com']);
 
     $this->from(route('contact'))
         ->post(route('contact.send'), [
@@ -30,5 +31,6 @@ test('a valid contact form submission sends the contact mail', function () {
         ->assertSessionHasNoErrors()
         ->assertSessionHas('success');
 
-    Mail::assertSent(ContactFormMail::class, fn (ContactFormMail $mail) => $mail->data['email'] === 'jane@example.com');
+    Mail::assertSent(ContactFormMail::class, fn (ContactFormMail $mail) => $mail->hasTo('inbox@example.com')
+        && $mail->data['email'] === 'jane@example.com');
 });

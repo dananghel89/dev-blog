@@ -24,7 +24,7 @@ Plan order in `docs/`:
 | Visibility | **Public** (decided 2026-11-04), but only after you review it as a visitor. It is created **private** first |
 | Commit identity | Every commit (author **and** committer): `Dan Anghel <7040327+dananghel89@users.noreply.github.com>`. Your gmail address is never used (your per-host email rule) |
 | Commit messages | One-line `type: description`. The original 2 commits are renamed (section 3); commits from the review and branding plans are already written in this style |
-| History scrub | **Identity and messages only.** File contents need no scrub (section 1.1). The optional content scrub in 4.3b exists only in case you decide otherwise |
+| History scrub | Identity, messages **and the old brand in file contents** (decided 2026-11-04: the project is now called **Dev Blog**, and the old site name, its domain, its contact address and the fake social handles built on it must not stay in the public history). See 1.1 and 4.3 |
 | History purge | None. The `example/` folder removed in `c36158d` is Laravel starter-kit code (MIT), not personal data |
 | Bitbucket | **Deleted** after GitHub is verified (you do this in the browser). Until then it is the fallback |
 | Tools | Standard git only (`git filter-branch`, `git bundle`). `gh` and `git filter-repo` aren't needed. GitHub steps happen in the browser |
@@ -34,7 +34,14 @@ Plan order in `docs/`:
 - 2 commits on `master` (`4b496c5` Upload project files to repository, `c36158d` Remove example directory), both authored and committed with your **gmail** address. The review and branding plans add more commits with your Bitbucket address (the local identity while the remote is Bitbucket).
 - No `.env` was ever committed (`git log --all -- .env` → nothing). The local database is MySQL (`dev_blog`, since 2026-11-04) and lives outside the repo; the old `database/database.sqlite` was git-ignored (`*.sqlite*`), so no database was ever committed. There are no API keys or tokens.
 - Your gmail address does **not** appear in any file content, in any commit.
-- File contents with personal data: `hello@example.com`, in `ContactController`, `ContactFormMail`, the footer, the contact page and the mail template. It is the blog's **public** contact address and is shown on the site anyway. The review plan (R10) moves it to `.env`, so the latest commit no longer contains it; older commits do. **Decision: not scrubbed.** If you prefer it scrubbed, run 4.3b instead of 4.3.
+- Your own name and account stay as planned (decided 2026-11-04): the commit author name, the `dananghel89` GitHub account in the repo URL and noreply address, and the composer package `dananghel/dev-blog`.
+- File contents with the **old brand**, all removed from the current files on 2026-11-04, when the project was renamed **Dev Blog**:
+  - the old site name and its domain (header, footer, layout title, mail template, placeholder image text)
+  - the old contact address (`ContactController`, `ContactFormMail`, contact page, footer)
+  - three fake social handles built on the old name (footer, contact page)
+  - their mentions in older versions of `docs/`
+
+  **Decision: scrubbed from every commit** (4.3). The values are deliberately not written in this plan: 4.3 reads them from the first commit.
 - No passwords. The only `password` hits are starter-kit Livewire properties in `example/` (`public string $password = ''`).
 - Size: about 170 KiB packed.
 - `.gitattributes` has `* text=auto eol=lf` and your global `core.autocrlf=true`. The rewrite runs with `core.autocrlf=false`, so line endings aren't touched.
@@ -74,10 +81,34 @@ Plan order in `docs/`:
 
 ### 4.3 Rewrite the history (local)
 
-Run in Git Bash from the repo root. It rewrites `master` only and keeps the original author/commit dates. There's no tree filter, so it takes seconds.
+Run in Git Bash from the repo root. It rewrites `master` only and keeps the original author/commit dates.
+- The env filter sets the identity, and the message filter renames the two original commits.
+- The **tree filter** removes the old brand from every commit (decided 2026-11-04).
+
+The old values are **never written in the repo**: the commands read them from the first commit.
 
 ```bash
 export FILTER_BRANCH_SQUELCH_WARNING=1
+# the old contact address, read from the first commit; the old site name and domain come from it
+export OLD_EMAIL=$(git show 4b496c5:app/Mail/ContactFormMail.php | grep -oP "to: '\K[^']+")
+export OLD_DOMAIN=${OLD_EMAIL#*@}
+export NAME=${OLD_DOMAIN%%.*} TLD=${OLD_DOMAIN#*.}
+echo "$OLD_EMAIL / $NAME / $TLD"   # check all three are filled before running
+
+# the tree filter lives outside the repo, so its quoting stays simple
+cat > ../scrub-dev-blog.sh <<'EOF'
+grep -rlIZ -i --exclude-dir=vendor --exclude-dir=node_modules -e "$NAME" . 2>/dev/null \
+| xargs -0 -r sed -i -E \
+    -e "s/[A-Za-z0-9._%+-]+@$NAME[\\]?[.]$TLD/hello@example.com/gI" \
+    -e "s/text=$NAME[\\]?[.]$TLD/text=dev-blog/gI" \
+    -e "s/$NAME-site/dev-blog/gI" \
+    -e "s#github[.]com/$NAME\\b#github.com/example#gI" \
+    -e "s/@${NAME}_dev/@example/gI" \
+    -e "s#linkedin[.]com/in/$NAME\\b#linkedin.com/in/example#gI" \
+    -e "s#(<span[^>]*>|[*][*])?$NAME(</?span[^>]*>|[*][*])*[\\]?[.]?(</?span[^>]*>|[*][*])*$TLD#Dev Blog#gI"
+EOF
+export SCRUB="$(pwd)/../scrub-dev-blog.sh"
+
 git -c core.autocrlf=false filter-branch --force \
   --env-filter '
     export GIT_AUTHOR_NAME="Dan Anghel"
@@ -87,24 +118,19 @@ git -c core.autocrlf=false filter-branch --force \
   --msg-filter '
     sed -e "1s/^Upload project files to repository$/feat: add developer blog on the Laravel Livewire starter kit/" \
         -e "1s/^Remove example directory$/chore: remove starter-kit example views/"' \
+  --tree-filter 'sh "$SCRUB"' \
   -- master
 ```
 
-The original history stays reachable at `refs/original/refs/heads/master` until 4.7, as well as in the bundle and on Bitbucket.
-
-### 4.3b Optional: also scrub the contact address
-
-Only if you decide `hello@example.com` must not stay in old commits. Run this **instead of** 4.3: the same command, plus a tree filter that replaces the address. The domain itself stays, because it is the blog's brand.
-
-```bash
-cat > ../scrub-dev-blog.sh <<'EOF'
-grep -rlIZ --exclude-dir=vendor --exclude-dir=node_modules -e 'hello@example.com' . 2>/dev/null \
-| xargs -0 -r sed -i -e 's/hello@example.com/hello@example.com/g'
-EOF
-export SCRUB="$(pwd)/../scrub-dev-blog.sh"
-# add to the 4.3 command, before "-- master":
-#   --tree-filter 'sh "$SCRUB"' \
-```
+- The rules, in order:
+  - the old contact address → `hello@example.com`
+  - the old placeholder image text and the old `package-lock.json` project name → `dev-blog`
+  - the three fake social handles → `example`
+  - every form of the old site name: plain, `<span>`-wrapped, or with Markdown `**` around it or around the dot → `Dev Blog`
+- Your identity is **not** touched: the author name, the `dananghel89` GitHub account and the Bitbucket user. None of them is followed by the old domain ending, so no rule matches them.
+- The rules use bracket expressions (`[.]`, `[*]`, `[\]`) on purpose. With backslash escapes inside double quotes, the "optional backslash" turned into a literal `\?`, and the dry run on 2026-11-04 matched nothing.
+- **Dry run first:** clone the repo into a scratch folder (`git clone . ../dev-blog-dryrun`), run the same commands there, and run check 4.4.5. For any form of the old name the rules missed, add a rule, then run it for real.
+- The original history stays reachable at `refs/original/refs/heads/master` until 4.7, as well as in the bundle and on Bitbucket.
 
 ### 4.4 Verify the rewrite (local, before any push)
 
@@ -114,9 +140,10 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 2. **Identity:** `git log --format='%an <%ae> | %cn <%ce>' master | sort -u` → exactly one line, with the noreply address for both author and committer.
 3. **Messages:** `git log --format=%s master` shows the new first-line messages and no other changes.
 4. **No gmail anywhere:** `git log --format='%ae %ce' master | grep -c gmail` → `0`.
-5. **Content unchanged:** for every old/new pair (`paste ../dev-blog-commits-before.txt <(git rev-list master)`), `git diff <old> <new>` → empty. If 4.3b was used, only the files that contained the address may differ.
-6. **Dates kept:** `git log --format='%ad %s' master` shows the original dates (2026-02-26, 2026-03-01, …).
-7. **App still works:** `composer dump-autoload`, then `php artisan test` → green.
+5. **Old brand gone:** `git grep -n -i -E "$NAME" $(git rev-list master) | grep -v -i -E "dan[ -]?$NAME"` → nothing. The second grep keeps your identity (author name, `dananghel89`, `dan-anghel`), which is allowed.
+6. **Only the intended content changed:** for every old/new pair (`paste ../dev-blog-commits-before.txt <(git rev-list master)`), `git diff --stat <old> <new>` lists only files that contained the old brand: views, controller, Mailable, `docs/*.md` and the theme banners. Any other file means line endings changed, so stop.
+7. **Dates kept:** `git log --format='%ad %s' master` shows the original dates (2026-02-26, 2026-03-01, …).
+8. **App still works:** `composer dump-autoload`, then `php artisan test` → green.
 
 ### 4.5 Switch the remote and push
 
@@ -153,10 +180,10 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 
 ### 4.9 ⏸ You: delete the Bitbucket repo (browser)
 
-**Only after 4.6 and 4.8 are done.** The Bitbucket repo still holds the original history with your gmail address.
+**Only after 4.6 and 4.8 are done.** The Bitbucket repo still holds the original history with your gmail address and the old brand.
 
 1. Bitbucket → `dan-anghel/dev-blog` → Repository settings → **Delete repository**.
-2. Delete the local bundle `../dev-blog-pre-github-*.bundle` too (it also contains the gmail address). Optionally keep it until the Laravel 13 upgrade is merged.
+2. Delete the local bundle `../dev-blog-pre-github-*.bundle` too (it also contains the gmail address and the old brand), and the dry-run clone `../dev-blog-dryrun`. Optionally keep it until the Laravel 13 upgrade is merged.
 
 ### 4.10 Docs and follow-up
 

@@ -10,7 +10,7 @@ Priority: **1, runs first.** Then [project-review-fix-plan.md](project-review-fi
 
 | Topic | Decision |
 |---|---|
-| Theme | **Blogy v1.0.0** by Untree.co (source: `C:\Users\Dan Anghel\Downloads\webs\blogy-v1.0.0`), Bootstrap 5 based. It replaces the current custom dark Bootstrap design on every public page |
+| Theme | **Blogy v1.0.0** by Untree.co (source: `~/Downloads/webs/blogy-v1.0.0`), Bootstrap 5 based. It replaces the current custom dark Bootstrap design on every public page |
 | Build | **Vite** (already installed: Vite 7.3, laravel-vite-plugin 2.1). The theme SCSS is compiled with **Sass** on top of **Bootstrap 5.3 from npm**. Tailwind and the Flux CSS import are removed from the Vite pipeline |
 | Third-party assets | **Everything comes from npm, bundled by Vite**: Bootstrap 5.3 (SCSS + JS), Bootstrap Icons, Work Sans (Fontsource), AOS. No CDN on the public site; the jsDelivr, Google Fonts and jQuery links are removed |
 | Livewire | **Interactive parts only** (decided 2026-11-04). Pages stay Blade, which is fast and SEO-friendly. Livewire 4 components handle: the blog post list (index, category, tag, with pagination), the live search, and the contact form. The newsletter and comment forms are built later as Livewire components in the finish plan |
@@ -36,7 +36,7 @@ Priority: **1, runs first.** Then [project-review-fix-plan.md](project-review-fi
 | **You can't redistribute the templates** | The repo contains **only the adapted theme code inside the application**, never the template package: no `*.html` demo pages, no demo images, no `favicon.png`, no `prepros-6.config`, no IcoMoon/Flaticon fonts, no copy of the theme's bundled Bootstrap/plugin files. Only Untree.co's own SCSS partials and navbar script are copied, modified, into `resources/` |
 | CC BY 3.0 attribution: credit the author, link the license, and mark changes | (1) The `/*! … */` header comment is kept at the top of every SCSS/JS file taken from the theme, with "Modified for Dev Blog" added. Vite's minifier drops these comments by default; `esbuild: { legalComments: 'inline' }` in `vite.config.js` keeps them (found and fixed in Phase 2, 2026-11-04), so the credit is also in the compiled CSS/JS. (2) README "Credits": *Design based on the Blogy template by Untree.co (https://untree.co), licensed CC BY 3.0, modified.* |
 
-The original download stays **outside** the repo (`Downloads\webs\blogy-v1.0.0`) and is used only as the reference while converting.
+The original download stays **outside** the repo (`~/Downloads/webs/blogy-v1.0.0`) and is used only as the reference while converting.
 
 ### What is taken from the theme
 
@@ -68,7 +68,7 @@ The original download stays **outside** the repo (`Downloads\webs\blogy-v1.0.0`)
 
 The theme's bio box isn't ported.
 
-**Header:** logo "Dev Blog" in the theme's style. The menu has Home, Blog, a Categories dropdown (top categories), About and Contact, plus the theme's search form (a GET form to `blog.search`). The mobile menu is built by `navbar.js`.
+**Header:** logo "Dev Blog" in the theme's logo style, without the theme's trailing dot (decided 2026-11-04). The menu has Home, Blog, a Categories dropdown (top categories), About and Contact, plus the theme's search form (a GET form to `blog.search`). The mobile menu is built by `navbar.js`.
 
 **Footer:** *About* (short blurb), *Social* (Bootstrap Icons; only configured networks once the branding plan is done), *Company* links (Home, Blog, About, Contact), *Recent Posts* (3 latest), and the **credit line** (section 2).
 
@@ -238,4 +238,7 @@ Order: layout pieces (Phase 3) → home → post page → about → contact (sta
 
 | ID | Location | Problem / question | Decision |
 |---|---|---|---|
-| – | – | – | – |
+| B01 | `blog/show.blade.php` (`@section('og_image', $post->featured_image)`, `@section('meta_description', $post->excerpt)`) | When the value is `null`, Blade treats the inline section as a block section and opens an output buffer that is never closed. Pest reported the test as "risky", and it showed up once `PostFactory` stopped setting `featured_image` (Phase 3) | Fixed in Phase 3: `og_image` uses the image or `default-og.png`; `meta_description` uses `?? ''`. Rule for all views: never pass a nullable value to an inline `@section` |
+| B02 | Phase 3, step 4 | The sidebar / post-card / post-meta partials only make sense next to the pages that use them | Moved to Phase 4: they're created while converting the blog pages |
+| B03 | Phase 3, step 2 | The plan named a view composer; header, footer and (Phase 4) sidebar need overlapping queries | `App\Support\SiteData` with `once()`-cached queries (one run per request), registered as view composers in `AppServiceProvider`. "Recent posts" is ordered by `published_at` (review-plan N01) |
+| B04 | Local MySQL data | 34 of the 50 posts in `dev_blog` still have `placehold.co` URLs from the old factory. `Post::imageUrl()` passes absolute URLs through, so those pages still load images from placehold.co | Run `php artisan migrate:fresh --seed` (backup first) to reseed without them |

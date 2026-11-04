@@ -23,7 +23,7 @@ class ContactController extends \App\Http\Controllers\Controller
         ]);
         
         // Send email
-        Mail::to('hello@example.com')->send(new ContactFormMail($validated));
+        Mail::to(config('project.contact_email'))->send(new ContactFormMail($validated));
         
         // Store in database if you want to keep records
         // ContactMessage::create($validated);

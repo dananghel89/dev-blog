@@ -31,7 +31,6 @@ class ContactFormMail extends Mailable
             subject: 'New Contact Form Message: ' . $this->data['subject'],
             replyTo: $this->data['email'],
             from: config('mail.from.address'),
-            to: 'hello@example.com'
         );
     }
 

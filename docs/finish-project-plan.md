@@ -9,7 +9,7 @@ This is the **sixth** plan. Start it only when all earlier plans are merged into
 
 1. [blogy-theme-plan.md](blogy-theme-plan.md): the public site in the Blogy theme (Vite + Sass, Bootstrap 5.3 from npm), Livewire components for the post list, search and contact form, and the Untree.co footer credit.
 2. [project-review-fix-plan.md](project-review-fix-plan.md): bug fixes, Pest test suite, starter kit (Fortify, Flux) removed, newsletter/legal pages failing cleanly.
-3. [branding-assets-plan.md](branding-assets-plan.md): identity in `config/blog.php`, own favicon, default OG image.
+3. [branding-assets-plan.md](branding-assets-plan.md): identity in `config/project.php`, own favicon, default OG image.
 4. [github-migration-plan.md](github-migration-plan.md): repo moved to GitHub (public), history rewritten.
 5. [laravel-13-upgrade-plan.md](laravel-13-upgrade-plan.md): Laravel 13, Livewire 4.4, Vite 8, Pest 5, skeleton-aligned config.
 6. **This plan:** builds the admin and the missing features directly on the upgraded stack.
@@ -30,7 +30,7 @@ Prerequisite check (Phase 0) before any work:
 | Newsletter | **Own, double opt-in** (decided 2026-11-04). Subscribers are stored in the DB. You send a published post to subscribers **manually**, once, with a Filament action. Mails are queued |
 | Comments | **Moderated** (decided 2026-11-04). Name + email (never shown) + plain-text body. Every comment starts as *pending*; only *approved* ones are shown. No threads, no Gravatar, no Markdown |
 | Spam protection | All public forms (contact, newsletter, comments): a hidden honeypot field plus a named rate limiter. A filled honeypot is stored as *spam* (comments, contact) or silently ignored (newsletter), and still shows the normal success message |
-| Site settings | **Editable in Filament** (a *Site settings* page backed by a `settings` table). Defaults come from `config('blog.*')` (branding plan), so nothing changes until edited |
+| Site settings | **Editable in Filament** (a *Site settings* page backed by a `settings` table). Defaults come from `config('project.*')` (branding plan), so nothing changes until edited |
 | Legal pages | A small **Pages** resource (Markdown) for Privacy Policy and Terms. They are seeded with placeholder text that already covers the newsletter, comments, the contact form and the theme credit |
 | Queue | `QUEUE_CONNECTION=database` (already set). Locally `composer dev` runs `queue:listen`. In production, the scheduler runs `queue:work --stop-when-empty` every minute, so a single cron line is enough on shared hosting |
 | Migrations | New features get **new migrations** (`create_subscribers_table`, `add_newsletter_fields_to_posts_table`, …); existing migrations are not edited |
@@ -70,7 +70,7 @@ Prerequisite check (Phase 0) before any work:
    - **no** `->registration()`
    - `->brandName(config('app.name'))`, `->favicon(asset('favicon.svg'))`, `->colors(['primary' => Color::hex('#214252')])` (Blogy's primary), dark mode available in the admin
 3. **Access:** `User implements FilamentUser` with `canAccessPanel(Panel $panel): bool` → `true` (single admin role; users only come from the seeder or the CLI). Without this, Filament returns 403 in production.
-4. **Seeded admin:** `AdminUserSeeder` creates `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (defaults `admin@example.com` / `password`, read through `config('blog.seed')`), with `email_verified_at = now()`. Document both keys in `.env.example`; your real values go only in the local `.env`.
+4. **Seeded admin:** `AdminUserSeeder` creates `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (defaults `admin@example.com` / `password`, read through `config('project.seed')`), with `email_verified_at = now()`. Document both keys in `.env.example`; your real values go only in the local `.env`.
 5. Password-reset mails use the existing mail settings (`MAIL_MAILER=log` locally).
 6. `php artisan storage:link`. On Windows, if the symlink fails without admin rights, create a junction: `mklink /J public\storage storage\app\public`. `/public/storage` is already git-ignored.
 7. Tests (`Admin/AccessTest`):
@@ -144,14 +144,14 @@ Prerequisite check (Phase 0) before any work:
 
 ### Phase 6 – Site settings and the About page
 
-1. Migration `create_settings_table`: `key` unique, `value` (json), timestamps. `App\Support\Settings` is a singleton that loads every row **once per request** (cached with `Cache::rememberForever('blog.settings')`, cleared on save), merged over `config('blog.*')`. The `settings('key')` helper is registered via `autoload.files`. A `QueryException` (fresh DB, table missing) falls back to config, so artisan commands and the first migration never break.
+1. Migration `create_settings_table`: `key` unique, `value` (json), timestamps. `App\Support\Settings` is a singleton that loads every row **once per request** (cached with `Cache::rememberForever('project.settings')`, cleared on save), merged over `config('project.*')`. The `settings('key')` helper is registered via `autoload.files`. A `QueryException` (fresh DB, table missing) falls back to config, so artisan commands and the first migration never break.
 2. Filament **Site settings** page (a custom page with a form, in its own navigation group), with these sections:
    - *General*: tagline, author name, contact email
    - *Social links*: GitHub, LinkedIn, X, Mastodon, …; empty means hidden
    - *Home*: hero heading, hero text
    - *About*: bio (Markdown), career start year, tech stack (a repeater of group + items), avatar (`FileUpload`, square, min 300×300)
    - *Legal pages*: privacy page, terms page (selects of published pages)
-3. Views read `settings()` instead of `config('blog.*')`. `APP_NAME` stays in `.env` (it is also used by mail and the session cookie name).
+3. Views read `settings()` instead of `config('project.*')`. `APP_NAME` stays in `.env` (it is also used by mail and the session cookie name).
 4. **Footer legal links:** the footer links to the privacy and terms pages chosen in *Legal pages*, and hides a link that isn't set. This replaces the link removed in review-plan R02. `PageSeeder` sets both settings.
 5. **About stats become real:**
    - `years_experience` = the current year − the career start year

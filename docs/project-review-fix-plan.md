@@ -69,7 +69,7 @@ Two suspicions were checked and **dropped** because they turned out not to be bu
 | R07 | Blog › Counts | `BlogController.php:19, 24`, `partials/header.blade.php:81-86`, `Category`/`Tag::getPostCountAttribute` | Category and tag counts (`withCount('posts')`) include drafts and scheduled posts. The `post_count` accessors run one query per item (N+1) | Code |
 | R08 | Mail › Contact | `emails/contact-form.blade.php:265, 291, 311-314` | The message is escaped twice: `{{ nl2br(e(…)) }}` prints a literal `&lt;br /&gt;` instead of line breaks. The reply `mailto:` subject isn't URL-encoded, so a subject containing `&` is cut off. The footer social links are `href="#"` | Reproduced |
 | R09 | Security › Forms | `ContactController::send`, `routes/web.php` | No rate limiting on the contact form: every submit sends an email (spam / mail flooding) | Code |
-| R10 | Contact › Recipient | `ContactController.php:26`, `ContactFormMail.php:34` | The recipient `hello@example.com` is hard-coded in two places | Code |
+| R10 | Contact › Recipient | `ContactController.php:26`, `ContactFormMail.php:34` | The recipient (the old brand's contact address) is hard-coded in two places. **Done early on 2026-11-04** with the rename to Dev Blog: `config/project.php` `contact_email` ← `CONTACT_EMAIL`, and the envelope `to:` was removed | Code |
 | R11 | Public › Newsletter | `pages/home.blade.php:198-213, 286-316`, `NewsletterController` | The form **never submits**: inline JS cancels it and shows "Subscribed!" after a timeout. The controller saves nothing either. `GET /newsletter/confirm/{anything}` says "Email confirmed successfully!" for any token | Reproduced |
 | R12 | Config | `.env`, `.env.example` (uncommitted change) | `APP_URL=http://dev-block.test` (typo). The vhost is `dev-blog.test`, so generated absolute URLs (`og:url`, share links, mail links) point to a host that doesn't exist | Code |
 | R13 | Blog › Search | `BlogController.php:66-80`, `blog/search.blade.php` | An empty `q` returns **all** posts (`LIKE '%%'`). `%` and `_` in the query aren't escaped. Content search also matches HTML markup (`q=h2` matches every post) | Code |
@@ -154,7 +154,7 @@ Each item: add a failing test → fix → green.
 | R07 | `BlogIndexTest`: category and tag counts ignore drafts | `withCount(['posts' => fn ($q) => $q->published()])` everywhere. Remove the `post_count` accessors and use `posts_count` in the views |
 | R08 | `ContactMailTest`: rendering the mail shows `line1<br />` (or a real line break) and no `&lt;br`; the `mailto:` link has an encoded subject | `{!! nl2br(e($data['message'])) !!}` (drop the `white-space: pre-wrap`, or keep pre-wrap and print `{{ $data['message'] }}`, but not both). `?subject={{ rawurlencode('Re: '.$data['subject']) }}`. Remove the `#` social links from the mail footer |
 | R09 | `ContactFormTest` (`Livewire::test`): the 4th submit within 10 minutes from the same IP is rejected and no mail is sent | Delivered by the theme plan (`RateLimiter::attempt` in the `contact-form` component). Only confirm the test exists and passes |
-| R10 | `ContactFormTest`: the mail goes to `config('blog.contact_email')` | New `config/blog.php` with `'contact_email' => env('CONTACT_EMAIL', 'hello@example.com')`, used by the `contact-form` component. Remove the `to:` from the Mailable envelope. Put your real address only in your local `.env`. Document `CONTACT_EMAIL` in `.env.example` |
+| R10 | **Done 2026-11-04** (`ContactFormTest` checks the recipient). Only confirm it in Phase D | New `config/project.php` with `'contact_email' => env('CONTACT_EMAIL', 'hello@example.com')`, used by the `contact-form` component. Remove the `to:` from the Mailable envelope. Put your real address only in your local `.env`. Document `CONTACT_EMAIL` in `.env.example` |
 | R11 | `HomePageTest`: no newsletter form; `NewsletterRoutesTest`: the three newsletter routes → 404 | The theme plan doesn't port the newsletter section. Remove the three routes and `NewsletterController`. The real double-opt-in newsletter is built in the finish plan |
 | R13 | `SearchTest` (`Livewire::test(…)` on `blog.search`): an empty or 1-character `q` shows no results (and a hint); `q=%` doesn't match everything | Delivered by the theme plan's `blog.search` component (min 2 characters, `addcslashes($q, '%_\\')`). Confirm the tests. Content search stays as it is until posts are Markdown (finish plan) |
 | R14 | `HomePageTest`: with no posts, there's no link to `/blog/%23` | Render the second hero button only when `$featuredPosts->isNotEmpty()` |
@@ -192,7 +192,7 @@ Each item: add a failing test → fix → green.
 
 1. Update `CLAUDE.md`:
    - The starter kit is gone; Filament is planned.
-   - `config/blog.php` / `CONTACT_EMAIL`
+   - `config/project.php` / `CONTACT_EMAIL`
    - The `published` rule, which now also applies to `show()`
    - Remove the "Starter-kit leftovers / known gaps" section
 2. Final review of all commits since the start of the plan, with your approval. Then the branding plan can start.

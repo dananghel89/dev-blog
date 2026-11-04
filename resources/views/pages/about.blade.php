@@ -11,7 +11,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-8 mx-auto text-center">
                     <div class="mb-4">
-                        <img src="https://placehold.co/150x150/6366f1/ffffff?text=dev-blog" 
+                        <img src="{{ asset('images/placeholders/avatar.svg') }}" 
                              alt="Profile" 
                              class="rounded-circle border border-3 border-primary"
                              style="width: 150px; height: 150px; object-fit: cover;">

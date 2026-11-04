@@ -113,7 +113,7 @@ Go through the [13.x upgrade guide](https://laravel.com/docs/13.x/upgrade). Thes
 1. **Request forgery (high impact):** `VerifyCsrfToken` was renamed to `PreventRequestForgery`. `bootstrap/app.php` has an empty `withMiddleware()`, and nothing references the old class (`grep -rn VerifyCsrfToken app bootstrap config tests` → nothing), so no change is needed.
 2. **Session `serialization` → `json`:** adopt it. The only session data is flash strings and old input (and the Filament login later). Active sessions are invalidated once, which is harmless.
 3. **Cache `serializable_classes`:** the app caches no PHP objects (the cache store is `database`; nothing calls `Cache::` today), so `false` is safe.
-4. **Cache prefix / session cookie name:** `config/cache.php` and `config/session.php` derive them from `APP_NAME`. The branding plan changed `APP_NAME` to "Dev Blog", so the cookie name already changed once there. Check that nothing hard-codes the old name.
+4. **Cache prefix / session cookie name:** `config/cache.php` and `config/session.php` derive them from `APP_NAME`. `APP_NAME` changed to "Dev Blog" on 2026-11-04, so the cookie name already changed once there. Check that nothing hard-codes the old name.
 5. **`symfony/polyfill-php85` global functions** (`array_first`, `array_last`): the app defines no global helper functions, so there's no conflict.
 6. **Pagination view rename:** applies only to the Bootstrap 3 views. The app uses `Paginator::useBootstrapFive()`. Check that `{{ $posts->links() }}` still renders Bootstrap 5 markup.
 7. **`Date::use(CarbonImmutable::class)`** and `DB::prohibitDestructiveCommands()` in `AppServiceProvider`: still supported; check that the seeders and factories don't mutate dates in place (`published_at`).
@@ -127,7 +127,7 @@ Use the `laravel/laravel` v13 skeleton as the reference ([compare 12.x…13.x](h
 1. **`config/`:** the starter kit published `app`, `auth`, `cache`, `database`, `filesystems`, `logging`, `mail`, `queue`, `services` and `session`.
    - Compare each with the L13 version (`php artisan config:publish --all --force` into a scratch copy of the repo, then diff).
    - Adopt the new keys, re-apply project values, and **delete any config file that ends up identical to the framework default** (L11+ falls back to the framework's).
-   - Keep `config/blog.php`, and keep `config/database.php` (it has the project value `'engine' => 'InnoDB'` for the mysql connection; re-apply it if the file is replaced).
+   - Keep `config/project.php`, and keep `config/database.php` (it has the project value `'engine' => 'InnoDB'` for the mysql connection; re-apply it if the file is replaced).
 2. **`.env.example`:** add the new L13 skeleton keys; keep `DB_CONNECTION=mysql` (with the `dev_blog` keys), `SESSION_DRIVER=database`, `CACHE_STORE=database` and `QUEUE_CONNECTION=database`. Your local `.env` gets the same keys.
 3. **`composer.json` scripts:** align `setup`, `dev`, `test`, `post-*` with the skeleton, including the npm steps (`npm install`, `npm run build`, `npm run dev`). Keep `lint` and `test:lint`.
 4. **`phpunit.xml`, `bootstrap/app.php`, `bootstrap/providers.php`, `tests/TestCase.php`, `tests/Pest.php`, `public/index.php`, `artisan`:** diff against the skeleton and adopt any changes.

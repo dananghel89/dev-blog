@@ -45,8 +45,8 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 | `.env` `APP_NAME=Laravel` | Every `<title>` ends in "- Laravel" |
 | layout `<meta name="author">` | "Your Name" |
 | home, About | "Hi, I'm **Your Name**" / the about blurb |
-| footer *Social*, contact info | `github.com/example`, `@example`, `linkedin.com/in/example`, which **may be real people's accounts**. All of them link to `#` |
-| header logo, footer copyright, `emails/contact-form.blade.php` | "Dev Blog" hard-coded in markup |
+| footer *Social*, contact info | Three fake social handles built on the old site name, which **may be real people's accounts**. **Replaced with plain network names on 2026-11-04**; the links still go to `#` |
+| header logo, footer copyright, `emails/contact-form.blade.php` | The old site name hard-coded in markup. **Done 2026-11-04**: the project is now **Dev Blog**; the logo is `Dev Blog` and the rest uses `config('app.name')` |
 | `composer.json` `name`/`description` | Changed to `dananghel/dev-blog` in the review plan |
 
 ## 3. Required vs optional
@@ -65,7 +65,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 
 ### Phase 1 – Identity in one place
 
-1. Extend `config/blog.php` (created by review-plan R10). Every value comes from `.env` and has a **neutral default**, so the public repo contains no personal values:
+1. Extend `config/project.php` (created by review-plan R10). Every value comes from `.env` and has a **neutral default**, so the public repo contains no personal values:
    ```php
    'name'          => env('APP_NAME', 'Dev Blog'),
    'tagline'       => env('BLOG_TAGLINE', 'Full stack development blog'),
@@ -78,13 +78,13 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
        // only networks with a URL are rendered
    ],
    ```
-2. `.env`: `APP_NAME="Dev Blog"`, plus your real `BLOG_AUTHOR`, `CONTACT_EMAIL` and social URLs (local only). `.env.example`: the keys with empty or neutral values.
+2. `.env`: `APP_NAME="Dev Blog"` (already set on 2026-11-04 in `.env` and `.env.example`), plus your real `BLOG_AUTHOR`, `CONTACT_EMAIL` and social URLs (local only). `.env.example`: the keys with empty or neutral values.
 3. Views:
-   - The header logo, `<title>`, meta author, the home/About texts, the footer *About* blurb and copyright, and the contact info read `config('blog.*')`.
-   - `partials/social-links.blade.php` loops over `config('blog.social')` with Bootstrap Icons and **renders only links that are set**. It's used in the footer, About and Contact.
+   - The header logo, `<title>`, meta author, the home/About texts, the footer *About* blurb and copyright, and the contact info read `config('project.*')`.
+   - `partials/social-links.blade.php` loops over `config('project.social')` with Bootstrap Icons and **renders only links that are set**. It's used in the footer, About and Contact.
    - The fake handles are removed.
-4. The logo keeps the theme's style: `Dev Blog`. It's built from `config('blog.name')` split at the first `.`; a name without a `.` renders plain.
-5. Contact mail template: `Dev Blog` → `config('app.name')`. Its colours are taken from the theme (`#214252` instead of the old indigo).
+4. The logo is the plain site name, `Dev Blog`, with no trailing dot (decided 2026-11-04). It's built from `config('project.name')`.
+5. Contact mail template: the name already uses `config('app.name')` (2026-11-04). Its colours are taken from the theme (`#214252` instead of the old indigo).
 6. Tests: `BrandingTest`:
    - the configured name and author appear on the home page
    - an unset social network renders no link
@@ -116,14 +116,14 @@ Done in [blogy-theme-plan.md](blogy-theme-plan.md), Phase 3: local SVGs in three
 1. `npm run build`, then check that the compiled CSS/JS in `public/build/assets/` still contains the `/*!` banners: Blogy/Untree.co, Bootstrap and Bootstrap Icons.
 2. README "Credits": the Blogy line from the theme plan, then Bootstrap, Bootstrap Icons, Work Sans (OFL 1.1), AOS.
 3. `composer.json`: `"license": "proprietary"`.
-4. `CLAUDE.md`: identity values live in `config/blog.php` / `.env` (neutral defaults, real values only in the local `.env`).
+4. `CLAUDE.md`: identity values live in `config/project.php` / `.env` (neutral defaults, real values only in the local `.env`).
 5. `php artisan test` → green; `vendor/bin/pint --test` → clean; a browser check of home, about, contact, a post with and without an image, and the footer.
 
 ## 5. Final state
 
 | Phase | Commit | Result |
 |---|---|---|
-| Identity | – | `config/blog.php` + `.env`; no "Your Name", no fake handles, no `#` links |
+| Identity | – | `config/project.php` + `.env`; no "Your Name", no fake handles, no `#` links |
 | Favicon | – | Own favicon (SVG, ICO, touch icon) |
 | Placeholders | – | Done in the theme plan; About avatar |
 | OG image | – | `default-og.png`, with a working fallback |

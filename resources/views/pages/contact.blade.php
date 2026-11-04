@@ -25,6 +25,7 @@
                             <h4 class="mb-2">Response time:</h4>
                             <p>Usually within 24-48 hours</p>
                         </div>
+                        @include('partials.social-links', ['wrapper' => 'mt-4', 'class' => 'list-unstyled social social-inline'])
                     </div>
                 </div>
 

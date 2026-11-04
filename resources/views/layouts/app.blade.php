@@ -10,22 +10,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Home') - {{ config('app.name', 'Dev Blog') }}</title>
+    <title>@yield('title', 'Home') - {{ config('project.name') }}</title>
 
     {{-- SEO --}}
-    <meta name="description" content="@yield('meta_description', 'Full-stack developer blog documenting daily challenges in PHP, MySQL, HTML, CSS, and JavaScript')">
+    <meta name="description" content="@yield('meta_description', config('project.tagline'))">
     <meta name="keywords" content="@yield('meta_keywords', 'PHP, MySQL, HTML, CSS, JavaScript, Laravel, web development, coding challenges')">
-    <meta name="author" content="Your Name">
+    <meta name="author" content="{{ config('project.author') }}">
 
     {{-- Open Graph / Twitter --}}
-    <meta property="og:title" content="@yield('title', config('app.name'))">
-    <meta property="og:description" content="@yield('meta_description', 'Full-stack development challenges and solutions')">
+    <meta property="og:title" content="@yield('title', config('project.name'))">
+    <meta property="og:description" content="@yield('meta_description', config('project.tagline'))">
+    <meta property="og:site_name" content="{{ config('project.name') }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('images/default-og.png'))">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', config('app.name'))">
-    <meta name="twitter:description" content="@yield('meta_description', 'Full-stack development blog')">
+    <meta name="twitter:title" content="@yield('title', config('project.name'))">
+    <meta name="twitter:description" content="@yield('meta_description', config('project.tagline'))">
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="192x192">

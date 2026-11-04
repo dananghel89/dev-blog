@@ -7,7 +7,7 @@
 @section('content')
 
     @if ($featuredPosts->isEmpty())
-        @include('partials.page-hero', ['title' => config('app.name'), 'subtitle' => 'No posts yet. Check back soon.'])
+        @include('partials.page-hero', ['title' => config('project.name'), 'subtitle' => 'No posts yet. Check back soon.'])
     @else
         {{-- Featured grid (Blogy "retro layout"): the 5 newest posts. --}}
         @php
@@ -15,7 +15,7 @@
         @endphp
         <section class="section bg-light">
             <div class="container">
-                <h1 class="visually-hidden">{{ config('app.name') }}</h1>
+                <h1 class="visually-hidden">{{ config('project.name') }}</h1>
                 <div class="row align-items-stretch retro-layout">
                     <div class="col-md-4">
                         @foreach ([0, 1] as $index)

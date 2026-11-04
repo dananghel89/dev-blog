@@ -27,10 +27,10 @@
         
         /* Header */
         .email-header {
-            background: linear-gradient(135deg, #0a0c0f 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, #214252 0%, #4D4C7D 100%);
             padding: 30px 20px;
             text-align: center;
-            border-bottom: 4px solid #6366f1;
+            border-bottom: 4px solid #4D4C7D;
         }
         
         .logo {
@@ -41,11 +41,11 @@
         }
         
         .logo span {
-            color: #6366f1;
+            color: #a9c1cd;
         }
         
         .header-title {
-            color: #9aa0a6;
+            color: #c9d3d8;
             margin: 10px 0 0;
             font-size: 16px;
         }
@@ -53,8 +53,8 @@
         /* Badge */
         .date-badge {
             display: inline-block;
-            background-color: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
+            background-color: rgba(33, 66, 82, 0.1);
+            color: #214252;
             padding: 8px 16px;
             border-radius: 30px;
             font-size: 14px;
@@ -85,7 +85,7 @@
         }
         
         .field-label i {
-            color: #6366f1;
+            color: #214252;
             margin-right: 10px;
             font-style: normal;
             font-size: 18px;
@@ -95,14 +95,14 @@
             background-color: #f8f9fa;
             padding: 15px 20px;
             border-radius: 10px;
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #214252;
             color: #333;
             font-size: 16px;
             word-break: break-word;
         }
         
         .field-value a {
-            color: #6366f1;
+            color: #214252;
             text-decoration: none;
         }
         
@@ -115,7 +115,7 @@
             background-color: #f8f9fa;
             padding: 20px;
             border-radius: 10px;
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #214252;
             color: #333;
             font-size: 16px;
             line-height: 1.8;
@@ -125,7 +125,7 @@
         /* Divider */
         .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+            background: linear-gradient(90deg, transparent, #214252, transparent);
             margin: 30px 0;
         }
         
@@ -145,7 +145,7 @@
         
         .reply-button {
             display: inline-block;
-            background-color: #6366f1;
+            background-color: #214252;
             color: #ffffff;
             text-decoration: none;
             padding: 12px 30px;
@@ -156,7 +156,7 @@
         }
         
         .reply-button:hover {
-            background-color: #4f52e0;
+            background-color: #4D4C7D;
         }
         
         .social-links {
@@ -172,7 +172,7 @@
         }
         
         .social-links a:hover {
-            color: #6366f1;
+            color: #214252;
         }
         
         /* Responsive */
@@ -216,7 +216,7 @@
     <div class="email-container">
         <!-- Header -->
         <div class="email-header">
-            <h1 class="logo">{{ config('app.name') }}<span>.</span></h1>
+            <h1 class="logo">{{ config('project.name') }}<span>.</span></h1>
             <p class="header-title">Full Stack Development Blog</p>
             <span class="date-badge">
                 📅 {{ now()->format('F j, Y') }} at {{ now()->format('g:i A') }}
@@ -240,7 +240,7 @@
                     <i>👤</i> Sender Information
                 </div>
                 <div class="field-value">
-                    <strong style="color: #6366f1;">{{ $data['name'] }}</strong>
+                    <strong style="color: #214252;">{{ $data['name'] }}</strong>
                     <span style="color: #6c757d; margin-left: 10px;">({{ $data['email'] }})</span>
                 </div>
             </div>
@@ -267,19 +267,19 @@
             </div>
             
             <!-- Quick Stats -->
-            <div style="background-color: #f0f4ff; border-radius: 8px; padding: 15px; margin: 30px 0;">
+            <div style="background-color: #eef2f4; border-radius: 8px; padding: 15px; margin: 30px 0;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr>
                         <td style="text-align: center; padding: 5px;">
-                            <div style="color: #6366f1; font-size: 20px; font-weight: 700;">{{ strlen($data['message']) }}</div>
+                            <div style="color: #214252; font-size: 20px; font-weight: 700;">{{ strlen($data['message']) }}</div>
                             <div style="color: #6c757d; font-size: 12px;">Characters</div>
                         </td>
                         <td style="text-align: center; padding: 5px;">
-                            <div style="color: #6366f1; font-size: 20px; font-weight: 700;">{{ str_word_count($data['message']) }}</div>
+                            <div style="color: #214252; font-size: 20px; font-weight: 700;">{{ str_word_count($data['message']) }}</div>
                             <div style="color: #6c757d; font-size: 12px;">Words</div>
                         </td>
                         <td style="text-align: center; padding: 5px;">
-                            <div style="color: #6366f1; font-size: 20px; font-weight: 700;">{{ explode('@', $data['email'])[1] ?? 'unknown' }}</div>
+                            <div style="color: #214252; font-size: 20px; font-weight: 700;">{{ explode('@', $data['email'])[1] ?? 'unknown' }}</div>
                             <div style="color: #6c757d; font-size: 12px;">Email Domain</div>
                         </td>
                     </tr>
@@ -304,7 +304,7 @@
         <!-- Footer -->
         <div class="email-footer">
             <p class="footer-text">
-                This message was sent from the contact form on <strong>{{ config('app.name') }}</strong>
+                This message was sent from the contact form on <strong>{{ config('project.name') }}</strong>
             </p>
             
             <div class="social-links">
@@ -312,7 +312,7 @@
             </div>
             
             <p class="footer-text" style="margin-top: 20px; font-size: 12px;">
-                © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
+                © {{ date('Y') }} {{ config('project.name') }}. All rights reserved.<br>
                 <span style="color: #999;">Built with Laravel and ❤️</span>
             </p>
         </div>

@@ -43,7 +43,7 @@ php artisan migrate:fresh --seed   # rebuild the local MySQL DB (dev_blog) with 
 Planned work lives in `docs/`, in this order:
 1. `blogy-theme-plan.md` (priority 1): the public site moves to the Blogy theme by Untree.co, built with Vite + Sass (Bootstrap 5.3 from npm, no CDNs), with Livewire components for the post list, search and contact form. The theme is CC BY 3.0: **the Untree.co footer credit must never be removed**, and only the adapted theme code may be committed, never the original template files or demo images.
 2. `project-review-fix-plan.md`: bug fixes, Pest suite, removal of Fortify/Flux.
-3. `branding-assets-plan.md`: identity in `config/blog.php`, own favicon, default OG image.
+3. `branding-assets-plan.md`: identity in `config/project.php`, own favicon, default OG image.
 4. `github-migration-plan.md`: Bitbucket → public GitHub, history rewritten to the noreply identity.
 5. `laravel-13-upgrade-plan.md`: Laravel 13, Livewire 4.4, Vite 8, Pest 5.
 6. `finish-project-plan.md`: Filament 5 admin, Markdown posts, double-opt-in newsletter, moderated comments, settings, feeds.

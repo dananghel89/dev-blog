@@ -28,40 +28,8 @@
                     </div>
                 </div>
 
-                {{-- Plain POST for now; becomes the contact-form Livewire component in Phase 6. --}}
                 <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-                    <form action="{{ route('contact.send') }}" method="POST" novalidate>
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="visually-hidden">Your name</label>
-                                <input type="text" id="name" name="name" value="{{ old('name') }}" required
-                                       class="form-control @error('name') is-invalid @enderror" placeholder="Your Name">
-                                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="visually-hidden">Your email</label>
-                                <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                                       class="form-control @error('email') is-invalid @enderror" placeholder="Your Email">
-                                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label for="subject" class="visually-hidden">Subject</label>
-                                <input type="text" id="subject" name="subject" value="{{ old('subject') }}" required
-                                       class="form-control @error('subject') is-invalid @enderror" placeholder="Subject">
-                                @error('subject') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label for="message" class="visually-hidden">Message</label>
-                                <textarea id="message" name="message" rows="7" required
-                                          class="form-control @error('message') is-invalid @enderror" placeholder="Message">{{ old('message') }}</textarea>
-                                @error('message') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Send Message</button>
-                            </div>
-                        </div>
-                    </form>
+                    <livewire:contact-form />
                 </div>
             </div>
         </div>

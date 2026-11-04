@@ -2,32 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContactFormMail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-
-class ContactController extends \App\Http\Controllers\Controller
+/*
+ * The form itself is the contact-form Livewire component (resources/views/livewire/contact-form.blade.php).
+ */
+class ContactController extends Controller
 {
     public function index()
     {
         return view('pages.contact');
-    }
-    
-    public function send(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
-        ]);
-        
-        // Send email
-        Mail::to(config('project.contact_email'))->send(new ContactFormMail($validated));
-        
-        // Store in database if you want to keep records
-        // ContactMessage::create($validated);
-        
-        return back()->with('success', 'Thank you for your message! I\'ll respond within 24-48 hours.');
     }
 }

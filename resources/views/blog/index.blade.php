@@ -7,5 +7,5 @@
 @section('content')
     @include('partials.page-hero', ['title' => 'Blog'])
 
-    @include('blog.partials.post-list', ['posts' => $posts])
+    @include('blog.partials.post-list')
 @endsection

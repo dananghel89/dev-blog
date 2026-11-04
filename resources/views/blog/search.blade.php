@@ -1,22 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Search Results: '.($query ?? '').' - Full Stack Development Blog')
-@section('meta_description', 'Search results for "'.($query ?? '').'"')
+@section('title', 'Search Results: '.$query.' - Full Stack Development Blog')
+@section('meta_description', 'Search results for "'.$query.'"')
 
 @push('styles')
     <meta name="robots" content="noindex">
 @endpush
 
 @section('content')
-    @include('partials.page-hero', [
-        'title' => 'Search',
-        'subtitle' => $posts->total() > 0
-            ? 'Found '.$posts->total().' '.Str::plural('post', $posts->total()).' matching "'.$query.'"'
-            : 'No posts found for "'.$query.'"',
-    ])
+    @include('partials.page-hero', ['title' => 'Search'])
 
-    @include('blog.partials.post-list', [
-        'posts' => $posts,
-        'emptyMessage' => 'Nothing matched your search. Try another keyword.',
-    ])
+    <div class="section search-result-wrap">
+        <div class="container">
+            <div class="row posts-entry">
+                <div class="col-lg-8">
+                    <livewire:blog.search />
+                </div>
+
+                @include('blog.partials.sidebar')
+            </div>
+        </div>
+    </div>
 @endsection

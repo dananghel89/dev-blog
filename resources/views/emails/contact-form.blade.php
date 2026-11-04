@@ -119,7 +119,6 @@
             color: #333;
             font-size: 16px;
             line-height: 1.8;
-            white-space: pre-wrap;
             font-family: 'Inter', monospace;
         }
         
@@ -262,7 +261,8 @@
                     <i>💬</i> Message
                 </div>
                 <div class="message-content">
-                    {{ nl2br(e($data['message'])) }}
+                    {{-- Escaped once (e), then line breaks as <br>: the only unescaped output in this mail. --}}
+                    {!! nl2br(e($data['message'])) !!}
                 </div>
             </div>
             
@@ -288,7 +288,7 @@
             
             <!-- Reply Button -->
             <div style="text-align: center;">
-                <a href="mailto:{{ $data['email'] }}?subject=Re: {{ $data['subject'] }}" class="reply-button">
+                <a href="mailto:{{ $data['email'] }}?subject={{ rawurlencode('Re: '.$data['subject']) }}" class="reply-button">
                     ✉️ Reply to {{ $data['name'] }}
                 </a>
             </div>
@@ -308,10 +308,7 @@
             </p>
             
             <div class="social-links">
-                <a href="#">GitHub</a> •
-                <a href="#">Twitter</a> •
-                <a href="#">LinkedIn</a> •
-                <a href="#">Blog</a>
+                <a href="{{ url('/') }}">Visit the blog</a>
             </div>
             
             <p class="footer-text" style="margin-top: 20px; font-size: 12px;">

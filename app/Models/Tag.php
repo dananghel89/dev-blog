@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Tag extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUniqueSlug;
 
     /**
      * The attributes that are mass assignable.
@@ -18,18 +18,9 @@ class Tag extends Model
         'slug'
     ];
 
-    /**
-     * Automatically create slug from name
-     */
-    protected static function boot()
+    protected function slugSource(): string
     {
-        parent::boot();
-        
-        static::creating(function ($tag) {
-            if (empty($tag->slug)) {
-                $tag->slug = Str::slug($tag->name);
-            }
-        });
+        return 'name';
     }
 
     /**
@@ -40,13 +31,6 @@ class Tag extends Model
         return $this->belongsToMany(Post::class);
     }
 
-    /**
-     * Get only published posts with this tag
-     */
-    public function publishedPosts()
-    {
-        return $this->belongsToMany(Post::class)->published();
-    }
 
     /**
      * Get the tag URL
@@ -56,11 +40,4 @@ class Tag extends Model
         return route('blog.tag', $this->slug);
     }
 
-    /**
-     * Get post count
-     */
-    public function getPostCountAttribute()
-    {
-        return $this->publishedPosts()->count();
-    }
 }

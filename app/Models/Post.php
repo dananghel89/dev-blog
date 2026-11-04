@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -9,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUniqueSlug;
 
     /**
      * The attributes that are mass assignable.
@@ -37,18 +38,9 @@ class Post extends Model
         'published_at' => 'datetime',
     ];
 
-    /**
-     * Automatically create slug from title
-     */
-    protected static function boot()
+    protected function slugSource(): string
     {
-        parent::boot();
-        
-        static::creating(function ($post) {
-            if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
-            }
-        });
+        return 'title';
     }
 
     /**

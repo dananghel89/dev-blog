@@ -46,7 +46,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
 | layout `<meta name="author">` | "Your Name" |
 | home, About | "Hi, I'm **Your Name**" / the about blurb |
 | footer *Social*, contact info | Three fake social handles built on the old site name, which **may be real people's accounts**. **Replaced with plain network names on 2026-11-04**; the links still go to `#` |
-| header logo, footer copyright, `emails/contact-form.blade.php` | The old site name hard-coded in markup. **Done 2026-11-04**: the project is now **Dev Blog**; the logo is `Dev Blog` and the rest uses `config('app.name')` |
+| header logo, footer copyright, `emails/contact-form.blade.php` | The old site name hard-coded in markup. **Done 2026-11-04**: the project is now **Dev Blog**; the logo is `Dev Blog.` and the rest uses `config('app.name')` |
 | `composer.json` `name`/`description` | Changed to `dananghel/dev-blog` in the review plan |
 
 ## 3. Required vs optional
@@ -83,7 +83,7 @@ The theme plan ports these into the new Blogy partials as they are. This plan re
    - The header logo, `<title>`, meta author, the home/About texts, the footer *About* blurb and copyright, and the contact info read `config('project.*')`.
    - `partials/social-links.blade.php` loops over `config('project.social')` with Bootstrap Icons and **renders only links that are set**. It's used in the footer, About and Contact.
    - The fake handles are removed.
-4. The logo is the plain site name, `Dev Blog`, with no trailing dot (decided 2026-11-04). It's built from `config('project.name')`.
+4. The logo keeps the theme's style, the name followed by a primary-coloured dot: `Dev Blog<span class="text-primary">.</span>` (like the theme's `Blogy.`; decided 2026-11-04). It's built from `config('project.name')`.
 5. Contact mail template: the name already uses `config('app.name')` (2026-11-04). Its colours are taken from the theme (`#214252` instead of the old indigo).
 6. Tests: `BrandingTest`:
    - the configured name and author appear on the home page

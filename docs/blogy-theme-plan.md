@@ -68,7 +68,7 @@ The original download stays **outside** the repo (`~/Downloads/webs/blogy-v1.0.0
 
 The theme's bio box isn't ported.
 
-**Header:** logo "Dev Blog" in the theme's logo style, without the theme's trailing dot (decided 2026-11-04). The menu has Home, Blog, a Categories dropdown (top categories), About and Contact, plus the theme's search form (a GET form to `blog.search`). The mobile menu is built by `navbar.js`.
+**Header:** logo "Dev Blog." in the theme's logo style, with the theme's primary-coloured dot (like "Blogy."; decided 2026-11-04). The menu has Home, Blog, a Categories dropdown (top categories), About and Contact, plus the theme's search form (a GET form to `blog.search`). The mobile menu is built by `navbar.js`.
 
 **Footer:** *About* (short blurb), *Social* (Bootstrap Icons; only configured networks once the branding plan is done), *Company* links (Home, Blog, About, Contact), *Recent Posts* (3 latest), and the **credit line** (section 2).
 

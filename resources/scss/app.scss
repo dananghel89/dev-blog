@@ -1,0 +1,26 @@
+/*!
+ * Template Name: Blogy
+ * Template Author: Untree.co (https://untree.co/)
+ * Template License: https://creativecommons.org/licenses/by/3.0/
+ * Modified for Dev Blog: built on Bootstrap 5.3 from npm instead of the bundled 5.1 copy.
+ */
+
+// Theme variables (from the template's style.scss), set before Bootstrap so its !default values pick them up.
+$font-family-sans-serif: 'Work Sans', sans-serif;
+$font-family-sans-serif-secondary: 'Work Sans', sans-serif;
+
+$primary: #214252;
+$secondary: #4D4C7D;
+
+// Bootstrap 5.3 (npm). Icons, fonts and AOS CSS are imported from resources/js/app.js,
+// so Vite resolves their font/asset URLs.
+@import 'bootstrap/scss/bootstrap';
+
+// Theme partials (Untree.co, modified)
+@import 'theme/site-navbar';
+@import 'theme/site-base';
+@import 'theme/site-blocks';
+@import 'theme/site-footer';
+
+// Project additions
+@import 'app/content';

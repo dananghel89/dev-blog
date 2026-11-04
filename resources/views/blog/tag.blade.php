@@ -11,7 +11,7 @@
     ])
 
     @include('blog.partials.post-list', [
-        'posts' => $posts,
+        'tag' => $tag,
         'emptyMessage' => 'No posts with this tag yet.',
     ])
 @endsection

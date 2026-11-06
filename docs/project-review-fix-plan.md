@@ -22,7 +22,7 @@ Runs **second**, after [blogy-theme-plan.md](blogy-theme-plan.md) (priority 1, a
 - PHP: plain **`php`** (8.4.26). Composer: global **`composer`** (2.10.3).
 - Tests are safe: `phpunit.xml` sets `DB_CONNECTION=sqlite` and `DB_DATABASE=:memory:`, so `RefreshDatabase` never touches the `dev_blog` MySQL database.
 - > ⛔ **Never remove or comment out those two `phpunit.xml` lines.** Without them, tests would use the `.env` MySQL connection, and `RefreshDatabase` would **wipe `dev_blog`**.
-- Back up the local DB before Phase A: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
+- Back up the local DB before Phase A: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql`).
 - Because tests run on SQLite but the app runs on MySQL, every phase also runs `php artisan migrate:fresh --seed` on MySQL. That catches MySQL-only problems: key lengths, strict mode, foreign keys, JSON columns.
 - The local site is `http://dev-blog.test` (WAMP vhost and hosts entry checked 2026-11-04).
 
@@ -104,7 +104,7 @@ Identity and content placeholders ("Your Name", `href="#"` social links, the mis
    - delete the leftover `database/database.sqlite` (copy it outside the repo first if you want to keep it)
    - check that `.gitignore` still ignores `*.sqlite*`; the test DB is in memory, so no file is created
 4. ~~**R12**~~: **done 2026-11-04**. `.env` and `.env.example` both use `APP_URL=http://dev-blog.test`. You chose the real local vhost over `http://localhost`. It's a local-only hostname, so it's harmless in the public repo.
-5. Record the baseline: `php artisan route:list > ../routes-before.txt` and `php artisan test` (23 failures expected; this is the "before" state).
+5. Record the baseline: `php artisan route:list > ~/Downloads/backups/dev-blog/routes-before.txt` and `php artisan test` (23 failures expected; this is the "before" state).
 
 ### Phase B – Remove the starter-kit leftovers (R01, R03, R16)
 

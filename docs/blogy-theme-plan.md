@@ -77,9 +77,9 @@ The theme's bio box isn't ported.
 ### Phase 0 – Prerequisites and baseline
 
 1. Work directly on `master`; tag the starting point: `git tag pre-blogy` and `git push origin pre-blogy`.
-2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
+2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql`).
 3. ~~Commit the uncommitted changes~~: **done 2026-11-04** (`176a32c`, `dc91d33`, `6a7c6bc`: InnoDB fix, package-lock name, `.env.example` on MySQL and `dev-blog.test`). Check that `git status` is clean.
-4. Take screenshots of the current home, blog, post, about and contact pages for comparison (`../dev-blog-before/`).
+4. Take screenshots of the current home, blog, post, about and contact pages for comparison (`~/Downloads/backups/dev-blog/dev-blog-before/`).
 5. `npm install`, then `npm run build` → it works today (Tailwind + Flux CSS), and this is the reference.
 
 ### Phase 1 – Safety net: route tests for the current behaviour

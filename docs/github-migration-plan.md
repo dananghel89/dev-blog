@@ -68,9 +68,9 @@ Plan order in `docs/`:
 1. The review and branding plans are finished on `master`. `git status` → clean; `git branch` → only `master`.
 2. `git fetch origin` and `git status` → `master` is in sync with `origin/master` (Bitbucket), so the fallback has everything.
 3. `php artisan test` → green. This is the reference for after the rewrite.
-4. **Backup** outside the repo: `git bundle create ../dev-blog-pre-github-YYYYMMDD.bundle --all`, then `git bundle verify ../dev-blog-pre-github-YYYYMMDD.bundle`.
+4. **Backup** outside the repo: `git bundle create ~/Downloads/backups/dev-blog/dev-blog-pre-github-YYYYMMDD.bundle --all`, then `git bundle verify ~/Downloads/backups/dev-blog/dev-blog-pre-github-YYYYMMDD.bundle`.
 5. Record the "before" state for comparison:
-   - `git rev-list master > ../dev-blog-commits-before.txt`
+   - `git rev-list master > ~/Downloads/backups/dev-blog/dev-blog-commits-before.txt`
    - `git rev-list --count master`
 
 ### 4.2 ⏸ You: create the empty GitHub repo (browser)
@@ -98,7 +98,7 @@ export NAME=${OLD_DOMAIN%%.*} TLD=${OLD_DOMAIN#*.}
 echo "$OLD_EMAIL / $NAME / $TLD"   # check all three are filled before running
 
 # the tree filter lives outside the repo, so its quoting stays simple
-cat > ../scrub-dev-blog.sh <<'EOF'
+cat > ~/Downloads/backups/dev-blog/scrub-dev-blog.sh <<'EOF'
 grep -rlIZ -i --exclude-dir=vendor --exclude-dir=node_modules -e "$NAME" . 2>/dev/null \
 | xargs -0 -r sed -i -E \
     -e "s/[A-Za-z0-9._%+-]+@$NAME[\\]?[.]$TLD/hello@example.com/gI" \
@@ -109,7 +109,7 @@ grep -rlIZ -i --exclude-dir=vendor --exclude-dir=node_modules -e "$NAME" . 2>/de
     -e "s#linkedin[.]com/in/$NAME\\b#linkedin.com/in/example#gI" \
     -e "s#(<span[^>]*>|[*][*])?$NAME(</?span[^>]*>|[*][*])*[\\]?[.]?(</?span[^>]*>|[*][*])*$TLD#Dev Blog#gI"
 EOF
-export SCRUB="$(pwd)/../scrub-dev-blog.sh"
+export SCRUB="$HOME/Downloads/backups/dev-blog/scrub-dev-blog.sh"
 
 git -c core.autocrlf=false filter-branch --force \
   --env-filter '
@@ -131,7 +131,7 @@ git -c core.autocrlf=false filter-branch --force \
   - every form of the old site name: plain, `<span>`-wrapped, or with Markdown `**` around it or around the dot → `Dev Blog`
 - Your identity is **not** touched: the author name, the `dananghel89` GitHub account and the Bitbucket user. None of them is followed by the old domain ending, so no rule matches them.
 - The rules use bracket expressions (`[.]`, `[*]`, `[\]`) on purpose. With backslash escapes inside double quotes, the "optional backslash" turned into a literal `\?`, and the dry run on 2026-11-04 matched nothing.
-- **Dry run first:** clone the repo into a scratch folder (`git clone . ../dev-blog-dryrun`), run the same commands there, and run check 4.4.5. For any form of the old name the rules missed, add a rule, then run it for real.
+- **Dry run first:** clone the repo into a scratch folder (`git clone . ~/Downloads/backups/dev-blog/dev-blog-dryrun`), run the same commands there, and run check 4.4.5. For any form of the old name the rules missed, add a rule, then run it for real.
 - The original history stays reachable at `refs/original/refs/heads/master` until 4.7, as well as in the bundle and on Bitbucket.
 
 ### 4.4 Verify the rewrite (local, before any push)
@@ -143,7 +143,7 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 3. **Messages:** `git log --format=%s master` shows the new first-line messages and no other changes.
 4. **No gmail anywhere:** `git log --format='%ae %ce' master | grep -c gmail` → `0`.
 5. **Old brand gone:** `git grep -n -i -E "$NAME" $(git rev-list master) | grep -v -i -E "dan[ -]?$NAME"` → nothing. The second grep keeps your identity (author name, `dananghel89`, `dan-anghel`), which is allowed.
-6. **Only the intended content changed:** for every old/new pair (`paste ../dev-blog-commits-before.txt <(git rev-list master)`), `git diff --stat <old> <new>` lists only files that contained the old brand: views, controller, Mailable, `docs/*.md` and the theme banners. Any other file means line endings changed, so stop.
+6. **Only the intended content changed:** for every old/new pair (`paste ~/Downloads/backups/dev-blog/dev-blog-commits-before.txt <(git rev-list master)`), `git diff --stat <old> <new>` lists only files that contained the old brand: views, controller, Mailable, `docs/*.md` and the theme banners. Any other file means line endings changed, so stop.
 7. **Dates kept:** `git log --format='%ad %s' master` shows the original dates (2026-02-26, 2026-03-01, …).
 8. **App still works:** `composer dump-autoload`, then `php artisan test` → green.
 
@@ -185,7 +185,7 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 **Only after 4.6 and 4.8 are done.** The Bitbucket repo still holds the original history with your gmail address and the old brand.
 
 1. Bitbucket → `dan-anghel/dev-blog` → Repository settings → **Delete repository**.
-2. Delete the local bundle `../dev-blog-pre-github-*.bundle` too (it also contains the gmail address and the old brand), and the dry-run clone `../dev-blog-dryrun`. Optionally keep it until the Laravel 13 upgrade is merged.
+2. Delete the local bundle `~/Downloads/backups/dev-blog/dev-blog-pre-github-*.bundle` too (it also contains the gmail address and the old brand), and the dry-run clone `~/Downloads/backups/dev-blog/dev-blog-dryrun`. Optionally keep it until the Laravel 13 upgrade is merged.
 
 ### 4.10 Docs and follow-up
 
@@ -198,14 +198,14 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 - [x] All commits use the noreply address and one-line `type: description` messages
 - [x] No gmail address in the history
 - [x] The GitHub repo is public, with Issues/Wiki/Projects/Discussions off
-- [ ] The Bitbucket repo is deleted (you, in the browser); the local bundle `../dev-blog-pre-github-20261104.bundle` is deleted (or kept until after the upgrade)
+- [ ] The Bitbucket repo is deleted (you, in the browser); the local bundle `~/Downloads/backups/dev-blog/dev-blog-pre-github-20261104.bundle` is deleted (or kept until after the upgrade)
 - [x] `php artisan test` green on the GitHub `master` (95 tests)
 
 ## 6. Rollback
 
 | Situation | Action |
 |---|---|
-| Rewrite looks wrong (before push) | `git reset --hard refs/original/refs/heads/master`, or restore from the bundle: `git fetch ../dev-blog-pre-github-*.bundle master:master --force` (after `git checkout --detach`) |
+| Rewrite looks wrong (before push) | `git reset --hard refs/original/refs/heads/master`, or restore from the bundle: `git fetch ~/Downloads/backups/dev-blog/dev-blog-pre-github-*.bundle master:master --force` (after `git checkout --detach`) |
 | Push went wrong (repo still private) | Delete and recreate the GitHub repo in the browser, then push again. **No force-push without asking** |
 | Anything else before 4.9 | Bitbucket is untouched and stays the source of truth until it is deleted |
 
@@ -213,7 +213,7 @@ All of these must pass; if one fails, reset to the backup (section 6) and fix th
 
 | Step | Result |
 |---|---|
-| 4.1 Pre-flight | `master` = Bitbucket `master` (31 commits), 95 tests green, bundle `../dev-blog-pre-github-20261104.bundle` created and verified |
+| 4.1 Pre-flight | `master` = Bitbucket `master` (31 commits), 95 tests green, bundle `~/Downloads/backups/dev-blog/dev-blog-pre-github-20261104.bundle` created and verified |
 | 4.2 GitHub repo | Created by you, **public from the start** (your decision on 2026-11-04, instead of private first). It was empty, so the push needed no force. Issues, Wiki, Projects and Discussions were already off |
 | 4.3 Rewrite | Dry run on a scratch clone first, then the same commands on the repo: both produced the same tip, so the dry-run checks apply 1:1 |
 | 4.4 Verify | 31 commits; one identity (noreply, author and committer); the two original messages renamed; 0 gmail identities; 0 old-brand hits in any commit; only files that held the old brand changed (views, controller, Mailable, the theme banners, `package-lock.json`, `docs/*.md`); author and committer dates unchanged; tests green |

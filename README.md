@@ -21,7 +21,7 @@ php artisan migrate:fresh --seed   # demo categories, tags and posts
 composer dev                       # local server, queue, logs and Vite
 ```
 
-Set your own values in `.env` (never committed). The repository only holds neutral defaults (`config/project.php`):
+Set your own values in `.env` (never committed). The site identity has neutral defaults in `config/project.php`. These keys are optional and not listed in `.env.example`: add any of them to your `.env` to override a default.
 
 | Key | Used for |
 |---|---|

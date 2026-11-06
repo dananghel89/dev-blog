@@ -76,12 +76,12 @@ These are the versions after the review plan. Check them in Phase 0, since the r
 ### Phase 0 – Preparation and baseline (nothing changes)
 
 1. Work directly on `master`, with no branch. Mark the starting point with `git tag pre-laravel-13` and `git push origin pre-laravel-13`; this is the rollback point.
-2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
+2. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql`).
 3. Record the baseline:
    - `php artisan --version` → `Laravel Framework 12.x`
-   - `php artisan route:list > ../dev-blog-routes-before.txt`
-   - `php artisan about > ../dev-blog-about-before.txt`
-   - `composer show --direct > ../dev-blog-packages-before.txt`
+   - `php artisan route:list > ~/Downloads/backups/dev-blog/dev-blog-routes-before.txt`
+   - `php artisan about > ~/Downloads/backups/dev-blog/dev-blog-about-before.txt`
+   - `composer show --direct > ~/Downloads/backups/dev-blog/dev-blog-packages-before.txt`
    - `php artisan test` → all green
 4. Run the smoke checklist (section 5) on `http://dev-blog.test` and note anything already broken, so it isn't blamed on the upgrade.
 
@@ -131,7 +131,7 @@ Use the `laravel/laravel` v13 skeleton as the reference ([compare 12.x…13.x](h
 2. **`.env.example`:** add the new L13 skeleton keys; keep `DB_CONNECTION=mysql` (with the `dev_blog` keys), `SESSION_DRIVER=database`, `CACHE_STORE=database` and `QUEUE_CONNECTION=database`. Your local `.env` gets the same keys.
 3. **`composer.json` scripts:** align `setup`, `dev`, `test`, `post-*` with the skeleton, including the npm steps (`npm install`, `npm run build`, `npm run dev`). Keep `lint` and `test:lint`.
 4. **`phpunit.xml`, `bootstrap/app.php`, `bootstrap/providers.php`, `tests/TestCase.php`, `tests/Pest.php`, `public/index.php`, `artisan`:** diff against the skeleton and adopt any changes.
-5. `composer dump-autoload` → `php artisan optimize:clear` → `php artisan route:list > ../dev-blog-routes-after.txt`, then diff against the baseline (expected: identical) → `php artisan test` (green) → smoke test.
+5. `composer dump-autoload` → `php artisan optimize:clear` → `php artisan route:list > ~/Downloads/backups/dev-blog/dev-blog-routes-after.txt`, then diff against the baseline (expected: identical) → `php artisan test` (green) → smoke test.
 
 ### Phase 5 – Vite toolchain
 
@@ -187,7 +187,7 @@ CLI:
 ## 6. Rollback
 
 - Code: `git revert --no-edit pre-laravel-13..master` (a new commit, so no force-push), then `composer install`, `npm install` and `npm run build`. To only test the old state, run `git checkout pre-laravel-13`, then the same three commands.
-- Database: the upgrade adds no migrations. If anything goes wrong, restore the Phase 0 dump with `mysql -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql` (full path in Phase 0).
+- Database: the upgrade adds no migrations. If anything goes wrong, restore the Phase 0 dump with `mysql -u root dev_blog < ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (full path in Phase 0).
 - Each phase is its own commit, so you can also revert only the phases after the last good one.
 
 ## 7. Known issues and risks

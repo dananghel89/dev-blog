@@ -59,7 +59,7 @@ Prerequisite check (Phase 0) before any work:
 
 1. Run the prerequisite check (section 1).
 2. Work directly on `master`: commit and push each phase only after you confirm it (I show the files and message first), with no feature branch.
-3. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ../dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ../dev-blog-backup-YYYYMMDD.sql`).
+3. Back up the MySQL DB: `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (mysqldump isn't on the PATH; restore with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysql" -u root dev_blog < ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql`).
 
 ### Phase 1 – Filament panel and admin access
 

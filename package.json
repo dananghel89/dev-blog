@@ -14,9 +14,12 @@
         "bootstrap-icons": "^1.13.2"
     },
     "devDependencies": {
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^2.0",
-        "sass": "^1.107.1",
-        "vite": "^7.0.4"
+        "concurrently": "^10.0.7",
+        "laravel-vite-plugin": "^3.2.1",
+        "sass": "^1.108.1",
+        "vite": "^8.3.7"
+    },
+    "optionalDependencies": {
+        "@laravel/multiplex": "^0.4.5"
     }
 }

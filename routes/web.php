@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Privacy, terms, the sitemap and the newsletter are rebuilt in the finish plan
-| (docs/finish-project-plan.md); until then they don't exist (real 404s).
+| Privacy, terms, the sitemap and the newsletter don't exist yet (real 404s);
+| they come back with the admin.
 |
 */
 

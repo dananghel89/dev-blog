@@ -53,7 +53,7 @@ Paginating components return `'vendor.pagination.blogy-livewire'` from `paginati
 
 ## Planned work
 
-Planned work lives in `docs/`, in this order:
+Planned work lives in `docs/`: the user's **local working notes, gitignored on purpose** (`/docs` in `.gitignore`, removed from the whole history on 2026-11-09). Never add them with `git add -f`, never link to them from tracked files (code, comments, README), and never put plan names or phases in commit messages. Commit hashes written inside the plans before 2026-11-09 no longer exist. The plans, in order:
 1. `blogy-theme-plan.md` (priority 1, phases 0–8 done): the Blogy theme, Vite + Sass, the Livewire components.
 2. `project-review-fix-plan.md` (done): bug fixes, Pest suite, removal of Fortify/Flux.
 3. `branding-assets-plan.md` (done): identity in `config/project.php`, own favicon, default OG image.

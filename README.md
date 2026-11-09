@@ -2,15 +2,15 @@
 
 A personal developer blog about the real problems met while building with PHP, MySQL, HTML, CSS and JavaScript, and how they were solved.
 
-Built with Laravel 12, Livewire 4 and Vite.
+Built with Laravel 13, Livewire 4 and Vite 8.
 
 > There is no admin yet: posts come from the database seeders. A Filament admin for writing posts is on the way.
 
 ## Requirements
 
-- PHP 8.4, Composer
+- PHP 8.4, Composer 2
 - MySQL 8 (InnoDB)
-- Node 20+
+- Node 20.19+ or 22.12+ (Vite 8)
 
 ## Setup
 
@@ -36,7 +36,7 @@ To show your photo on the About page, add `public/images/avatar.jpg`.
 ## Tests
 
 ```bash
-php artisan test tests/Feature/Site
+php artisan test
 ```
 
 Tests run on an in-memory SQLite database, so they never touch your MySQL data.

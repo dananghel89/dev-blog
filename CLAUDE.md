@@ -4,19 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Dev Blog**: a personal developer blog (Laravel 12, PHP 8.4, Livewire 4). The public site uses the **Blogy** theme by Untree.co. It started from the Laravel Livewire starter kit, but the kit's auth and settings (Fortify, Flux) were removed: there is **no login or admin yet**. A Filament admin is planned (finish plan); until then, posts come from the seeders.
+**Dev Blog**: a personal developer blog (Laravel 13, PHP 8.4, Livewire 4.4, Vite 8, Pest 5). The public site uses the **Blogy** theme by Untree.co. It started from the Laravel Livewire starter kit, but the kit's auth and settings (Fortify, Flux) were removed: there is **no login or admin yet**. A Filament admin is planned (finish plan); until then, posts come from the seeders.
 
 ## Commands
 
 ```bash
 composer setup            # first-time: install deps, copy .env, key:generate, migrate, npm install + build
-composer dev              # runs artisan serve + queue:listen + pail (logs) + vite concurrently
+composer dev              # php artisan dev: serve + queue:listen + vite (+ pail where pcntl exists, so not on Windows)
 composer lint             # pint --parallel (auto-fix code style, "laravel" preset)
 
 npm run build             # compile resources/scss/app.scss + resources/js/app.js into public/build (needed for the site)
 npm run dev               # Vite dev server with hot reload
 
-php artisan test                                             # whole suite (green)
+php artisan test                                             # whole suite (green); add -d xdebug.mode=off after php if Xdebug slows it
 php artisan test tests/Feature/Site/SearchTest.php           # single file
 php artisan test --filter="search needs at least two"        # single test by name
 
@@ -26,6 +26,8 @@ php artisan migrate:fresh --seed   # rebuild the local MySQL DB (dev_blog) with 
 - Local DB is **MySQL 8.3 on WAMP** (database `dev_blog`), site at `http://dev-blog.test`. `config/database.php` forces `'engine' => 'InnoDB'`, because WAMP's MySQL defaulted to MyISAM, whose 1000-byte key limit breaks the `utf8mb4` unique indexes and which ignores foreign keys. Back up with `"/c/Wamp/bin/mysql/mysql8.3.0/bin/mysqldump" -u root dev_blog > ~/Downloads/backups/dev-blog/dev-blog-backup-YYYYMMDD.sql` (not on the PATH).
 - **Backups and other files kept outside the repo** (DB dumps, git bundles, route/package baselines, scratch clones) go in `~/Downloads/backups/dev-blog/`, never next to the repo. The repo lives in `~/Develop/Projects/dev-blog` (moved from `~/Develop/Workspace/dev-blog` on 2026-11-05).
 - Tests use in-memory SQLite (`phpunit.xml`), with `RefreshDatabase` applied to everything under `tests/Feature` (via `tests/Pest.php`). **Never remove the `DB_CONNECTION`/`DB_DATABASE` lines from `phpunit.xml`**: tests would then hit `dev_blog` and wipe it. `tests/TestCase.php` calls `withoutVite()`, so tests don't need `npm run build`. Because tests run on SQLite and the app on MySQL, raw SQL must work on both (e.g. `LIKE … ESCAPE '!'` in the search component).
+- `config/` only holds files with project values: `cache.php` (`serializable_classes => false`), `database.php` (InnoDB), `session.php` (`serialization => json`, hyphenated cookie name), `livewire.php` and `project.php`. Everything else uses the framework defaults (Laravel 11+), so don't publish config files without a project value to put in them.
+- **Composer on Windows:** extracting packages inside the project can fail with "Could not delete … antivirus or Windows Search Indexer", which leaves `vendor/` half-updated. Don't retry in place: move `vendor/`'s contents and copy `composer.json`/`composer.lock` to a folder outside the project, run `composer install --no-scripts --no-autoloader` there, move `vendor/` back, then `composer dump-autoload` (and `php artisan vendor:publish --tag=laravel-assets --force`, which the skipped scripts would run).
 - `MAIL_MAILER=log` locally. Contact-form emails go to `storage/logs/laravel.log`. The recipient is `config('project.contact_email')` (`CONTACT_EMAIL` in `.env`).
 
 ## Architecture
@@ -39,9 +41,9 @@ php artisan migrate:fresh --seed   # rebuild the local MySQL DB (dev_blog) with 
 
 Paginating components return `'vendor.pagination.blogy-livewire'` from `paginationView()`. `resources/views/pages` holds plain Blade views, not Livewire pages (the `pages::` namespace was removed from the config).
 
-**Frontend.** Vite + Sass, no CDNs. `resources/scss/app.scss` = the theme variables + Bootstrap 5.3 (npm) + the Blogy partials in `resources/scss/theme/` + project additions in `resources/scss/app/`. `resources/js/app.js` = Bootstrap JS, the Work Sans font (Fontsource), Bootstrap Icons, AOS, and the theme's navbar and preloader scripts in `resources/js/theme/`. Shared header, footer and sidebar data comes from view composers in `AppServiceProvider` backed by `App\Support\SiteData` (`once()`-cached queries). `Post::imageUrl($ratio)` returns the featured image or a local placeholder (`public/images/placeholders/`).
+**Frontend.** Vite + Sass, no CDNs. `resources/scss/app.scss` = the theme variables + Bootstrap 5.3 (npm) + the Blogy partials in `resources/scss/theme/` + project additions in `resources/scss/app/`. Sass `silenceDeprecations` lists exactly the IDs Bootstrap 5.3 still triggers (`import`, `global-builtin`, `color-functions`). If `npm run dev` is stopped abruptly, delete a leftover `public/hot`, or the site keeps loading assets from the dead dev server. `resources/js/app.js` = Bootstrap JS, the Work Sans font (Fontsource), Bootstrap Icons, AOS, and the theme's navbar and preloader scripts in `resources/js/theme/`. Shared header, footer and sidebar data comes from view composers in `AppServiceProvider` backed by `App\Support\SiteData` (`once()`-cached queries). `Post::imageUrl($ratio)` returns the featured image or a local placeholder (`public/images/placeholders/`).
 
-**Theme license (important).** Blogy is CC BY 3.0 (https://untree.co/license/). **Never remove the Untree.co credit link in `partials/footer.blade.php`** (`ThemeCreditTest` checks it on every page). Keep the `/*! … Untree.co … */` headers in the theme SCSS/JS files; `vite.config.js` sets `esbuild.legalComments: 'inline'` so they survive the build. Never commit the original template files (demo `*.html`, demo images, IcoMoon/Flaticon fonts, the bundled vendor copies).
+**Theme license (important).** Blogy is CC BY 3.0 (https://untree.co/license/). **Never remove the Untree.co credit link in `partials/footer.blade.php`** (`ThemeCreditTest` checks it on every page). Keep the `/*! … Untree.co … */` headers in the theme SCSS/JS files. Vite 8 minifies JS with Oxc and CSS with Lightning CSS, which would drop them: `vite.config.js` keeps them with `build.rolldownOptions.output.comments.legal` (JS) and the small `keepCssLicenseComments()` plugin (CSS: puts each module's banners back at the top of its CSS file). After `npm run build`, the CSS and JS in `public/build/assets` must still contain the Untree.co, Bootstrap and Bootstrap Icons banners. Never commit the original template files (demo `*.html`, demo images, IcoMoon/Flaticon fonts, the bundled vendor copies).
 
 **Domain model.** `Post` belongs to `Category` and is many-to-many with `Tag` (through `post_tag`). Posts, categories and tags use route-model binding by `slug`. `Post`, `Category` and `Tag` use `App\Models\Concerns\HasUniqueSlug`: a missing slug is generated from `slugSource()` and made unique (`title`, `title-2`, ...). Visibility always goes through `Post::published()` (`is_published = true` AND `published_at <= now()`), including `BlogController::show` (drafts and scheduled posts → 404). Lists order by `published_at`, and every count is of published posts only.
 
@@ -58,7 +60,7 @@ Planned work lives in `docs/`: the user's **local working notes, gitignored on p
 2. `project-review-fix-plan.md` (done): bug fixes, Pest suite, removal of Fortify/Flux.
 3. `branding-assets-plan.md` (done): identity in `config/project.php`, own favicon, default OG image.
 4. `github-migration-plan.md` (done): Bitbucket → public GitHub, history rewritten to the noreply identity and scrubbed of the old brand.
-5. `laravel-13-upgrade-plan.md`: Laravel 13, Livewire 4.4, Vite 8, Pest 5.
+5. `laravel-13-upgrade-plan.md` (done): Laravel 13, Livewire 4.4, Vite 8, Pest 5.
 6. `finish-project-plan.md`: Filament 5 admin, Markdown posts, double-opt-in newsletter, moderated comments, settings, feeds.
 
 Each plan works directly on `master`, one commit per phase, and only after the user approves. Commit messages are one-line `type: description`.

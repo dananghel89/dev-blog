@@ -1,9 +1,3 @@
-/*!
- * Template Name: Blogy
- * Template Author: Untree.co (https://untree.co/)
- * Template License: https://creativecommons.org/licenses/by/3.0/
- * Modified for Dev Blog: only the AOS setup and the preloader are kept (no sliders, no lightbox).
- */
 import AOS from 'aos';
 
 export function initAnimations() {

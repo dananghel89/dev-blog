@@ -1,10 +1,3 @@
-/*!
- * Template Name: Blogy
- * Template Author: Untree.co (https://untree.co/)
- * Template License: https://creativecommons.org/licenses/by/3.0/
- * Modified for Dev Blog: ES module, null-safe, no timeout, outside-click check covers every toggle.
- */
-
 // Builds the off-canvas mobile menu from the desktop menu (.js-clone-nav) and wires the toggles.
 export function initNavbar() {
     const mobileMenu = document.querySelector('.site-mobile-menu');
